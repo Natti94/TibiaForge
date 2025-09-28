@@ -69,7 +69,9 @@ function DamageSpells({ character }) {
             <p>
               Your vocation is{" "}
               <strong>{forceCasing(character.vocation)}.</strong>
-              <h4>Effective Damage:</h4>
+              <br />
+              <br />
+              Effective Damage:
             </p>
             <ul>
               <li>

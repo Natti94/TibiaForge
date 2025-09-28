@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchStatistics } from "../../../../services";
+import { fetchStatistics, fetchWorlds } from "../../../../services";
 
 function Statistics({
   world = "Antica",
@@ -49,20 +49,18 @@ function Statistics({
     { value: "druids", label: "Druids" },
   ];
 
-  // Load worlds
   useEffect(() => {
     let isMounted = true;
     (async () => {
       try {
         const list = await fetchWorlds();
         if (isMounted && Array.isArray(list) && list.length) {
-          setWorlds(["ALL", ...list]);
-          if (!list.includes(selWorld) && selWorld !== "ALL") {
-            setSelWorld("ALL");
+          setWorlds(["All", ...list]);
+          if (!list.includes(selWorld) && selWorld !== "All") {
+            setSelWorld("All");
           }
         }
       } catch (e) {
-        // Keep default world if worlds fetch fails
         console.error(e);
       }
     })();
@@ -77,7 +75,6 @@ function Statistics({
         setLoading(true);
         setError(null);
         if (selWorld === "ALL") {
-          // Aggregate across worlds: fetch first page for each world and combine
           const promises = worlds
             .filter((w) => w !== "ALL")
             .slice(0, 5)
@@ -94,7 +91,6 @@ function Statistics({
           const combined = results
             .filter((r) => r.status === "fulfilled")
             .flatMap((r) => r.value.list || []);
-          // Sort by rank within each world, but for ALL we can sort by value/level desc if available
           combined.sort(
             (a, b) => (b.level ?? b.value ?? 0) - (a.level ?? a.value ?? 0)
           );
@@ -194,12 +190,26 @@ function Statistics({
       </ul>
       {meta.totalPages ? (
         <div className="media__stats-meta">
-          Page {meta.page} of {meta.totalPages} ({meta.totalRecords ?? 0}{" "}
-          records)
+          Page
+          <select
+            className="media__stats-select"
+            aria-label="Page"
+            value={meta.page}
+            onChange={(e) =>
+              setMeta((m) => ({ ...m, page: Number(e.target.value) }))
+            }
+            style={{ width: 60, margin: "0 6px" }}
+          >
+            {Array.from({ length: meta.totalPages }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+          of {meta.totalPages} ({meta.totalRecords ?? 0} records)
         </div>
       ) : null}
     </div>
   );
 }
-
 export default Statistics;

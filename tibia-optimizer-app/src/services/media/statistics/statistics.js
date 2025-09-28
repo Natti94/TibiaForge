@@ -7,9 +7,7 @@
  */
 
 export async function fetchWorlds() {
-  const base = (
-    import.meta.env.VITE_TIBIADATA_BASE || "https://api.tibiadata.com"
-  ).replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
   const res = await fetch(`${base}/v4/worlds`);
   if (!res.ok) {
     throw new Error(`Failed to fetch worlds (${res.status})`);
@@ -20,7 +18,6 @@ export async function fetchWorlds() {
     : [];
   return worlds;
 }
-
 
 export async function fetchStatistics(args = {}) {
   let world,
@@ -41,7 +38,7 @@ export async function fetchStatistics(args = {}) {
     );
   }
 
-  const base = import.meta.env.VITE_API_URI_STATISTICS.replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
   const url = `${base}/v4/highscores/${encodeURIComponent(
     world
   )}/${encodeURIComponent(category)}/${encodeURIComponent(

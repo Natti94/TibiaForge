@@ -1,3 +1,11 @@
+/**
+ * Fetch highscores using TibiaData v4 API syntax:
+ * GET /v4/highscores/{world}/{category}/{vocation}/{page}
+ * @param {number|{world:string,category:string,vocation?:string,page?:number,limit?:number}} args
+ * If number: treated as limit (slice list). If object: provide { world, category } and optional { vocation, page, limit }.
+ * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object}>}
+ */
+
 export async function fetchStatistics(args = {}) {
   let world,
     category,

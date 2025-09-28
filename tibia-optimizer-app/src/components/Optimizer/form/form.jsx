@@ -368,25 +368,20 @@ function Form() {
                     <p>
                       <strong>
                         {" "}
-                        <img src={assets.level} alt="Level Icon" /> Level:
+                        Level:
                       </strong>{" "}
                       {main.level || "None"}
                     </p>
                     <p>
                       <strong>
                         {" "}
-                        <img src={assets.magic} alt="Magic Level Icon" /> Magic
-                        Level:
+                     
                       </strong>{" "}
                       {main.magic || "None"}
                     </p>
                     <p>
                       <strong>
                         {" "}
-                        <img
-                          src={assets.magic}
-                          alt="Effective Magic Level Icon"
-                        />{" "}
                         Effective Magic Level:
                       </strong>{" "}
                       {effectiveMagicLevel}
