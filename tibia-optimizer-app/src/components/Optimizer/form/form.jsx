@@ -6,6 +6,7 @@ import Equipments from "./form-wrapper/character/items/equipments";
 import Weapons from "./form-wrapper/character/items/weapons";
 import DamageRunes from "./form-wrapper/encounters/character/runes/damageRunes";
 import DamageSpells from "./form-wrapper/encounters/character/spells/damageSpells";
+import Creatures from "./form-wrapper/encounters/creatures";
 
 function Form() {
   const [main, setMain] = useState({
@@ -43,6 +44,7 @@ function Form() {
   const [showSkills, setShowSkills] = useState(true);
   const [showEquipments, setShowEquipments] = useState(true);
   const [showWeapons, setShowWeapons] = useState(true);
+  const [showCreatures, setShowCreatures] = useState(true);
 
   const [intro, setIntro] = useState(true);
   const [showMainCard, setShowMainCard] = useState(false);
@@ -366,24 +368,13 @@ function Form() {
                       {forceCasing(main.vocation) || "None"}
                     </p>
                     <p>
-                      <strong>
-                        {" "}
-                        Level:
-                      </strong>{" "}
-                      {main.level || "None"}
+                      <strong> Level:</strong> {main.level || "None"}
                     </p>
                     <p>
-                      <strong>
-                        {" "}
-                     
-                      </strong>{" "}
-                      {main.magic || "None"}
+                      <strong> </strong> {main.magic || "None"}
                     </p>
                     <p>
-                      <strong>
-                        {" "}
-                        Effective Magic Level:
-                      </strong>{" "}
+                      <strong> Effective Magic Level:</strong>{" "}
                       {effectiveMagicLevel}
                     </p>
                     <p>
@@ -523,6 +514,8 @@ function Form() {
             ↑
           </button>
         )}
+      <Creatures />
+    
       </div>
     </div>
   );

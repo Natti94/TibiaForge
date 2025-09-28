@@ -1,25 +1,24 @@
 /**
- * Fetch highscores using TibiaData v4 API syntax:
- * GET /v4/highscores/{world}/{category}/{vocation}/{page}
- * @param {number|{world:string,category:string,vocation?:string,page?:number,limit?:number}} args
- * If number: treated as limit (slice list). If object: provide { world, category } and optional { vocation, page, limit }.
- * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object}>}
+ * Fetch highscores or worlds using TibiaData v4 API
+ * @param {number|{world:string,category:string,vocation?:string,page?:number,limit?:number,fetchWorlds?:boolean}} args
+ * If number: treated as limit (slice highscore list). If object: provide { world, category } and optional { vocation, page, limit } for highscores, or { fetchWorlds: true } for worlds.
+ * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object} | string[]>}
  */
-
-export async function fetchWorlds() {
-  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
-  const res = await fetch(`${base}/v4/worlds`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch worlds (${res.status})`);
-  }
-  const data = await res.json();
-  const worlds = Array.isArray(data?.worlds?.regular_worlds)
-    ? data.worlds.regular_worlds.map((w) => w.name).filter(Boolean)
-    : [];
-  return worlds;
-}
-
 export async function fetchStatistics(args = {}) {
+  const base = import.meta.env.VITE_API_TIBIA_BASE.replace(/\/$/, "");
+
+  if (args.fetchWorlds) {
+    const res = await fetch(`${base}/v4/worlds`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch worlds (${res.status})`);
+    }
+    const data = await res.json();
+    const worlds = Array.isArray(data?.worlds?.regular_worlds)
+      ? data.worlds.regular_worlds.map((w) => w.name).filter(Boolean)
+      : [];
+    return worlds;
+  }
+
   let world,
     category,
     vocation = "all",
@@ -34,11 +33,10 @@ export async function fetchStatistics(args = {}) {
 
   if (!world || !category) {
     throw new Error(
-      "fetchStatistics requires { world, category } as per TibiaData API"
+      "fetchStatistics requires { world, category } for highscores"
     );
   }
 
-  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
   const url = `${base}/v4/highscores/${encodeURIComponent(
     world
   )}/${encodeURIComponent(category)}/${encodeURIComponent(

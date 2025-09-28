@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchStatistics, fetchWorlds } from "../../../../services";
+import { fetchStatistics } from "../../../../services";
 
 function Statistics({
   world = "Antica",
@@ -53,15 +53,15 @@ function Statistics({
     let isMounted = true;
     (async () => {
       try {
-        const list = await fetchWorlds();
-        if (isMounted && Array.isArray(list) && list.length) {
-          setWorlds(["All", ...list]);
-          if (!list.includes(selWorld) && selWorld !== "All") {
+        const worldList = await fetchStatistics({ fetchWorlds: true });
+        if (isMounted && Array.isArray(worldList) && worldList.length) {
+          setWorlds(["All", ...worldList]);
+          if (!worldList.includes(selWorld) && selWorld !== "All") {
             setSelWorld("All");
           }
         }
       } catch (e) {
-        console.error(e);
+        console.error("Failed to fetch worlds:", e);
       }
     })();
     return () => {
@@ -74,13 +74,13 @@ function Statistics({
       try {
         setLoading(true);
         setError(null);
-        if (selWorld === "ALL") {
+        if (selWorld === "All") {
           const promises = worlds
-            .filter((w) => w !== "ALL")
+            .filter((w) => w !== "All")
             .slice(0, 5)
             .map((w) =>
               fetchStatistics({
-                world: w,
+                world: world,
                 category: selCategory,
                 vocation: selVocation,
                 page,
@@ -112,7 +112,7 @@ function Statistics({
           });
         }
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load statistics:", err);
         setError("Failed to load statistics");
         setItems([]);
       } finally {
@@ -122,11 +122,9 @@ function Statistics({
     getStatistics();
   }, [selWorld, selCategory, selVocation, page, limit, worlds]);
 
-  const categoryLabel = (function () {
-    const match = CATEGORY_OPTIONS.find((c) => c.value === selCategory);
-    return match ? match.label : selCategory;
-  })();
-  const worldLabel = selWorld === "ALL" ? "All worlds" : selWorld;
+  const categoryLabel =
+    CATEGORY_OPTIONS.find((c) => c.value === selCategory)?.label ?? selCategory;
+  const worldLabel = selWorld === "All" ? "All worlds" : selWorld;
 
   return (
     <div className="media__stats">
@@ -173,21 +171,31 @@ function Statistics({
           ))}
         </select>
       </div>
-      <ul className="media__stats-list">
-        {items.map((item) => (
-          <li className="media__stats-item" key={`${item.rank}-${item.name}`}>
-            <span className="media__stats-rank">#{item.rank}</span>
-            <span className="media__stats-name">{item.name}</span>
-            {typeof item.level === "number" ? (
-              <span className="media__stats-level"> — Level {item.level}</span>
-            ) : null}
-
-            {item.vocation ? (
-              <span className="media__stats-vocation"> — {item.vocation}</span>
-            ) : null}
-          </li>
-        ))}
-      </ul>
+      {error && <div className="media__stats-error">{error}</div>}
+      {loading ? (
+        <div className="media__stats-loading">Loading...</div>
+      ) : (
+        <ul className="media__stats-list">
+          {items.map((item) => (
+            <li className="media__stats-item" key={`${item.rank}-${item.name}`}>
+              <span className="media__stats-rank">#{item.rank}</span>
+              <span className="media__stats-name">{item.name}</span>
+              {typeof item.level === "number" ? (
+                <span className="media__stats-level">
+                  {" "}
+                  — Level {item.level}
+                </span>
+              ) : null}
+              {item.vocation ? (
+                <span className="media__stats-vocation">
+                  {" "}
+                  — {item.vocation}
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
       {meta.totalPages ? (
         <div className="media__stats-meta">
           Page
@@ -212,4 +220,5 @@ function Statistics({
     </div>
   );
 }
+
 export default Statistics;
