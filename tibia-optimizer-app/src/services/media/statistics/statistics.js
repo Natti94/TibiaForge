@@ -6,6 +6,22 @@
  * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object}>}
  */
 
+export async function fetchWorlds() {
+  const base = (
+    import.meta.env.VITE_TIBIADATA_BASE || "https://api.tibiadata.com"
+  ).replace(/\/$/, "");
+  const res = await fetch(`${base}/v4/worlds`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch worlds (${res.status})`);
+  }
+  const data = await res.json();
+  const worlds = Array.isArray(data?.worlds?.regular_worlds)
+    ? data.worlds.regular_worlds.map((w) => w.name).filter(Boolean)
+    : [];
+  return worlds;
+}
+
+
 export async function fetchStatistics(args = {}) {
   let world,
     category,
@@ -34,7 +50,7 @@ export async function fetchStatistics(args = {}) {
 
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error(`Failed to fetch highscores (${res.status})`);
+    throw new Error(`Failed to fetch statistics (${res.status})`);
   }
   const data = await res.json();
   const hs = data?.highscores;

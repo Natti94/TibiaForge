@@ -5,9 +5,11 @@
     right: min(28vw, 200px);
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* align to top instead of vertical center */
+    align-items: flex-start;
+    /* align to top instead of vertical center */
     bottom: 0;
-    padding: 18px 6px 0; /* add some top spacing */
+    padding: 18px 6px 0;
+    /* add some top spacing */
     z-index: 200;
     pointer-events: none;
 }
@@ -262,4 +264,3 @@
 .auth__handler-register form img {
     align-self: center;
 }
-

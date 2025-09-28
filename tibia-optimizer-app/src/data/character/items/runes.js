@@ -1,5 +1,4 @@
 export const runesList = [
-  // DAMAGE RUNES
   {
     name: "Sudden Death Rune",
     type: "offensive",
@@ -39,5 +38,4 @@ export const runesList = [
     effect: "Deals massive fire damage in an area.",
     manaCost: 140,
   },
-  // HEALING RUNES
 ];

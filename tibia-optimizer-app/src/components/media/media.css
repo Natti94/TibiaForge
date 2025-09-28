@@ -12,30 +12,24 @@
      z-index: 90;
      overflow-y: auto;
      overflow-x: hidden;
-     /* let panel scroll instead of content overflowing */
      scrollbar-gutter: stable both-edges;
-     /* reserve room for scrollbar */
  }
 
- /* Make border/padding count into width for all children to avoid overflow */
  .media,
  .media * {
      box-sizing: border-box;
  }
 
- /* Generic rule to ensure any images inside media never overflow horizontally */
  .media img {
      max-width: 100%;
      height: auto;
      display: block;
  }
 
- /* Ensure direct children don't exceed panel width */
  .media>* {
      max-width: 100%;
  }
 
- /* Banners in news and stats should always be fully contained */
  .media__news-banner,
  .media__stats-banner {
      width: 240px;
@@ -49,18 +43,14 @@
  .media__news {
      display: block;
      width: 100%;
-     min-height: 30vh;
+     min-height: 15vh;
      padding: 8px;
-     /* base */
      padding-right: 12px;
-     /* extra space so text doesn't sit under scrollbar */
      color: #222;
      font-family: monospace;
      overflow: hidden;
-     /* contain horizontal artifacts within card */
  }
 
- /* News card container to separate from main panel background */
  .media__news-card {
      display: block;
      width: 240px;
@@ -89,7 +79,6 @@
      width: 100%;
      padding: 0.45rem 0.6rem;
      min-width: 0;
-     /* allow children to shrink within panel */
  }
 
  .media__news-link {
@@ -169,11 +158,6 @@
      scrollbar-gutter: stable both-edges;
  }
 
- /* .media__stats-banner consolidated above with .media__news-banner */
-
- /* padding-right for stats list handled below in primary definition */
-
- /* Optional: style scrollbars slightly to match theme */
  .media__stats-list::-webkit-scrollbar {
      width: 8px;
  }
@@ -198,16 +182,6 @@
      border: 1px solid rgba(255, 140, 0, 0.25);
      border-radius: 6px;
      overflow: hidden;
-     /* contain inner list borders/shadows */
-     /* contain inner list borders/shadows */
- }
-
- .media__stats-title {
-     margin: 0 0 6px 0;
-     font-size: 0.92rem;
-     line-height: 1.1rem;
-     color: #fff;
-     font-weight: 600;
  }
 
  .media__stats-controls {
@@ -241,7 +215,6 @@
      max-height: 28vh;
      overflow: auto;
      padding-right: 6px;
-     /* avoid overlay scrollbar covering text */
      width: 100%;
  }
 
@@ -255,7 +228,6 @@
      background: rgba(0, 0, 0, 0.06);
      color: #fff;
      min-width: 0;
-     /* allow inner flex children to shrink */
  }
 
  .media__stats-rank {
@@ -272,7 +244,6 @@
      text-overflow: ellipsis;
      white-space: nowrap;
      min-width: 0;
-     /* fix flex item overflow */
  }
 
  .media__stats-level {
@@ -302,9 +273,7 @@
      display: -webkit-box;
      -webkit-box-orient: vertical;
      line-clamp: 6;
-     /* show up to ~6 lines of body */
      -webkit-line-clamp: 6;
-     /* show up to ~6 lines of body */
      overflow: hidden;
      text-overflow: ellipsis;
      white-space: normal;

@@ -1,5 +1,4 @@
 export const weaponsList = [
-  // SWORDS
   {
     name: "Sword",
     type: "weapon",

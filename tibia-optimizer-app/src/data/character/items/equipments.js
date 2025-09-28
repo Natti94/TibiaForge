@@ -1,5 +1,4 @@
 export const equipmentsList = [
-  // HELMETS
   {
     name: "Amazon Helmet",
     type: "helmet",
@@ -470,7 +469,6 @@ export const equipmentsList = [
     skills: {},
   },
 
-  // ARMORS
   {
     name: "Albino Plate",
     type: "armor",
@@ -916,7 +914,6 @@ export const equipmentsList = [
     skills: { magicLevel: 1 },
   },
 
-  // LEGS
   { name: "Alloy Legs", type: "leg", armor: 6, resistanceAll: 0, skills: {} },
   { name: "Blue Legs", type: "leg", armor: 3, resistanceAll: 0, skills: {} },
   { name: "Brass Legs", type: "leg", armor: 5, resistanceAll: 0, skills: {} },
@@ -1078,7 +1075,6 @@ export const equipmentsList = [
     skills: {},
   },
 
-  // BOOTS
   {
     name: "Badger Boots",
     type: "boot",
@@ -1250,7 +1246,6 @@ export const equipmentsList = [
   },
   { name: "Zaoan Shoes", type: "boot", armor: 1, resistanceAll: 0, skills: {} },
 
-  // AMULETS AND NECKLACES
   {
     name: "Amulet of Loss",
     type: "amulet",
@@ -1554,7 +1549,6 @@ export const equipmentsList = [
     skills: {},
   },
 
-  // RINGS
   {
     name: "Axe Ring",
     type: "ring",

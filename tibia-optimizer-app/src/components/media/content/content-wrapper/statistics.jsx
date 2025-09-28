@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchStatistics, fetchWorlds } from "../../../../services";
+import { fetchStatistics } from "../../../../services";
 
 function Statistics({
   world = "Antica",
@@ -177,9 +177,6 @@ function Statistics({
           ))}
         </select>
       </div>
-      <h2 className="media__stats-title">
-        Highscores: {categoryLabel} — {worldLabel}
-      </h2>
       <ul className="media__stats-list">
         {items.map((item) => (
           <li className="media__stats-item" key={`${item.rank}-${item.name}`}>

@@ -1,5 +1,5 @@
 export const spellsList = [
-  // DAMAGE SPELLS
+  
   {
     name: "Exori",
     type: "offensive",
@@ -10,5 +10,5 @@ export const spellsList = [
     maxFactor: 1.9,
   },
 
-  // HEALING SPELLS
+  
 ];

@@ -12,7 +12,8 @@ function Handler() {
       {!isLogin && !isRegister && (
         <>
           <p className="auth__handler-text">
-            Sign in or register to access your personalized <strong>Tibia Optimizer</strong> account.
+            Sign in or register to access your personalized{" "}
+            <strong>Tibia Optimizer</strong> account.
           </p>
           <div className="auth__cta">
             <Link to="/login" className="auth__btn">
