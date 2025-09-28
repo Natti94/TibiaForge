@@ -514,8 +514,6 @@ function Form() {
             ↑
           </button>
         )}
-      <Creatures />
-    
       </div>
     </div>
   );
