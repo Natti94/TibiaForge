@@ -9,17 +9,13 @@ export async function fetchCreatures(name = "") {
   const creature = data?.creature;
   if (!creature) throw new Error("No creature found");
 
-  // Return all relevant properties as per API
   return {
     name: creature.name,
     race: creature.race,
     image_url: creature.image_url,
-    description: creature.description,
-    behaviour: creature.behaviour,
     hitpoints: creature.hitpoints,
     immune: creature.immune,
     strong: creature.strong,
-    weak: creature.weak,
-    // ...add any other properties you need
+    weakness: creature.weakness,
   };
 }

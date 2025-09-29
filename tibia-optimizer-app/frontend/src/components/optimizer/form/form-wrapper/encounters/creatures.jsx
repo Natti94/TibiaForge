@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { fetchCreatures } from "../../../../../services";
 
@@ -9,7 +8,9 @@ function Creatures({ vocation }) {
   const [error, setError] = useState(null);
 
   const forceCasing = (str) =>
-    str ? str.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()) : "";
+    str
+      ? str.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())
+      : "";
 
   useEffect(() => {
     async function loadCreature() {
@@ -36,7 +37,6 @@ function Creatures({ vocation }) {
       setCreature(null);
       setError(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, vocation]);
 
   return (
@@ -75,39 +75,44 @@ function Creatures({ vocation }) {
               <p className="optimizer__creature-message">No creature found</p>
             )}
             {!loading && !error && creature && (
-              <div className="optimizer__creature-grid">
-                <div className="optimizer__creature-card">
-                  <h3 className="optimizer__creature-name">{forceCasing(creature.name)}</h3>
-                  <img
-                    src={creature.image_url}
-                    alt={creature.name}
-                    className="optimizer__creature-image"
-                  />
-                  <p className="optimizer__creature-type">
-                    <strong>Race:</strong> {forceCasing(creature.race || "Unknown")}
+              <div>
+                <h3 className="optimizer__creature-name">
+                  {forceCasing(creature.name)}
+                </h3>
+                <img
+                  src={creature.image_url}
+                  alt={creature.name}
+                  className="optimizer__creature-image"
+                />
+                <div className="optimizer__creature-property-box">
+                  <p className="optimizer__creature-property">
+                    <strong>Race:</strong>{" "}
+                    {forceCasing(creature.race || "Unknown")}
                   </p>
-                  <p className="optimizer__creature-hp">
-                    <strong>Hitpoints:</strong> {creature.hitpoints || "Unknown"}
+                  <p className="optimizer__creature-property">
+                    <strong>Hitpoints:</strong>{" "}
+                    {creature.hitpoints || "Unknown"}
                   </p>
-                  <p className="optimizer__creature-desc">
-                    <strong>Description:</strong> {creature.description || "None"}
-                  </p>
-                  <p className="optimizer__creature-behaviour">
-                    <strong>Behaviour:</strong> {creature.behaviour || "None"}
+                  <p className="optimizer__creature-property">
+                    <strong>Description:</strong>{" "}
+                    {creature.description || "None"}
                   </p>
                   {creature.immune && (
-                    <p className="optimizer__creature-immune">
-                      <strong>Immune:</strong> {creature.immune.join(", ") || "None"}
+                    <p className="optimizer__creature-property">
+                      <strong>Immune:</strong>{" "}
+                      {creature.immune.join(", ") || "None"}
                     </p>
                   )}
                   {creature.strong && (
-                    <p className="optimizer__creature-strong">
-                      <strong>Strong:</strong> {creature.strong.join(", ") || "None"}
+                    <p className="optimizer__creature-property">
+                      <strong>Strong:</strong>{" "}
+                      {creature.strong.join(", ") || "None"}
                     </p>
                   )}
                   {creature.weak && (
-                    <p className="optimizer__creature-weak">
-                      <strong>Weak:</strong> {creature.weak.join(", ") || "None"}
+                    <p className="optimizer__creature-property">
+                      <strong>Weak:</strong>{" "}
+                      {creature.weakness.join(", ") || "None"}
                     </p>
                   )}
                 </div>

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { fetchStatistics } from "../../../../services";
 
 function Statistics({
-  world = "Antica",
+  world = "antica",
   category = "experience",
-  vocation = "all",
+  vocation,
   page = 1,
   limit = 50,
 }) {
@@ -46,7 +46,7 @@ function Statistics({
     { value: "knights", label: "Knights" },
     { value: "paladins", label: "Paladins" },
     { value: "sorcerers", label: "Sorcerers" },
-    { value: "druids", label: "Druids" },
+    { value: "druids  ", label: "Druids" },
   ];
 
   useEffect(() => {
@@ -126,6 +126,7 @@ function Statistics({
     };
     getStatistics();
   }, [selWorld, selCategory, selVocation, meta.page, limit, worlds]);
+
   const categoryLabel =
     CATEGORY_OPTIONS.find((c) => c.value === selCategory)?.label ?? selCategory;
   const worldLabel = selWorld === "All" ? "All worlds" : selWorld;
@@ -201,24 +202,20 @@ function Statistics({
         </ul>
       )}
       {meta.totalPages ? (
-        <div className="media__stats-meta">
-          Page
-          <select
-            className="media__stats-select"
-            aria-label="Page"
-            value={meta.page}
-            onChange={(e) =>
-              setMeta((m) => ({ ...m, page: Number(e.target.value) }))
-            }
-            style={{ width: 60, margin: "0 6px" }}
-          >
-            {Array.from({ length: meta.totalPages }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          className="media__stats-select-page"
+          aria-label="Page"
+          value={meta.page}
+          onChange={(e) =>
+            setMeta((m) => ({ ...m, page: Number(e.target.value) }))
+          }
+        >
+          {Array.from({ length: meta.totalPages }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              Page: {i + 1}
+            </option>
+          ))}
+        </select>
       ) : null}
     </div>
   );
