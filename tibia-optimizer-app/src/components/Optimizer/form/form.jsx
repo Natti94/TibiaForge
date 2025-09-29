@@ -45,7 +45,6 @@ function Form() {
   const [showEquipments, setShowEquipments] = useState(true);
   const [showWeapons, setShowWeapons] = useState(true);
   const [showCreatures, setShowCreatures] = useState(true);
-
   const [intro, setIntro] = useState(true);
   const [showMainCard, setShowMainCard] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
@@ -360,6 +359,7 @@ function Form() {
                     </div>
                   )}
                 </div>
+
                 <div className="optimizer__equipment-summary">
                   <h3>Character Summary</h3>
                   <div className="optimizer__equipment-grid">
@@ -368,13 +368,13 @@ function Form() {
                       {forceCasing(main.vocation) || "None"}
                     </p>
                     <p>
-                      <strong> Level:</strong> {main.level || "None"}
+                      <strong>Level:</strong> {main.level || "None"}
                     </p>
                     <p>
-                      <strong> </strong> {main.magic || "None"}
+                      <strong>Magic Level:</strong> {main.magic || "None"}
                     </p>
                     <p>
-                      <strong> Effective Magic Level:</strong>{" "}
+                      <strong>Effective Magic Level:</strong>{" "}
                       {effectiveMagicLevel}
                     </p>
                     <p>
@@ -485,6 +485,36 @@ function Form() {
                       }}
                     />
                   </div>
+                </div>
+                <div className="m-b-10">
+                  <button
+                    className="optimizer__collapse-toggle"
+                    onClick={() => setShowCreatures((v) => !v)}
+                    aria-label={
+                      showCreatures ? "Collapse Creatures" : "Expand Creatures"
+                    }
+                    type="button"
+                  >
+                    <span
+                      className={`optimizer__arrow ${
+                        showCreatures
+                          ? "optimizer__arrow--up"
+                          : "optimizer__arrow--down"
+                      }`}
+                    ></span>
+                    <span className="optimizer__toggle-label">Creatures</span>
+                  </button>
+                </div>
+                <div
+                  className={`optimizer__collapsible-section${
+                    showCreatures ? " optimizer__collapsible-section--open" : ""
+                  }`}
+                >
+                  {showCreatures && (
+                    <div className="optimizer__panel">
+                      <Creatures />
+                    </div>
+                  )}
                 </div>
               </div>
             )}

@@ -3,4 +3,5 @@ export { loginUser } from "./auth/login";
 export { registerUser } from "./auth/register";
 export { fetchNews } from "./media/news";
 export { fetchStatistics } from "./media/statistics";
+export { fetchCreatures } from "./creatures";
 

@@ -5,7 +5,7 @@
  * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object} | string[]>}
  */
 export async function fetchStatistics(args = {}) {
-  const base = import.meta.env.VITE_API_TIBIA_BASE.replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
 
   if (args.fetchWorlds) {
     const res = await fetch(`${base}/v4/worlds`);
@@ -48,21 +48,21 @@ export async function fetchStatistics(args = {}) {
     throw new Error(`Failed to fetch statistics (${res.status})`);
   }
   const data = await res.json();
-  const highscores = data?.highscores;
+  const hs = data?.highscores;
 
-  const list = Array.isArray(highscores?.highscore_list)
-    ? highscores.highscore_list.slice(0, limit)
+  const list = Array.isArray(hs?.highscore_list)
+    ? hs.highscore_list.slice(0, limit)
     : [];
 
   return {
     list,
-    page: highscores?.highscore_page?.current_page ?? page,
-    totalPages: highscores?.highscore_page?.total_pages ?? null,
-    totalRecords: highscores?.highscore_page?.total_records ?? null,
-    category: highscores?.category ?? category,
-    vocation: highscores?.vocation ?? vocation,
-    world: highscores?.world ?? world,
-    age: highscores?.highscore_age,
+    page: hs?.highscore_page?.current_page ?? page,
+    totalPages: hs?.highscore_page?.total_pages ?? null,
+    totalRecords: hs?.highscore_page?.total_records ?? null,
+    category: hs?.category ?? category,
+    vocation: hs?.vocation ?? vocation,
+    world: hs?.world ?? world,
+    age: hs?.highscore_age,
     information: data?.information,
   };
 }
