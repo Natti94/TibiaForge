@@ -45,6 +45,8 @@ function Form() {
   const [showEquipments, setShowEquipments] = useState(true);
   const [showWeapons, setShowWeapons] = useState(true);
   const [showCreatures, setShowCreatures] = useState(true);
+  const [showDamageRunes, setShowDamageRunes] = useState(true);
+  const [showDamageSpells, setShowDamageSpells] = useState(true);
   const [intro, setIntro] = useState(true);
   const [showMainCard, setShowMainCard] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
@@ -469,21 +471,75 @@ function Form() {
                 <hr className="optimizer__rule-aqua" />
                 <h1>Encounter</h1>
                 <div className="optimizer__row">
-                  <div className="optimizer__col-main optimizer__panel">
-                    <DamageRunes
-                      character={{
-                        ...main,
-                        magic: effectiveMagicLevel,
-                      }}
-                    />
+                  <div className="optimizer__col-main">
+                    <div className="m-b-10">
+                      <button
+                        className="optimizer__collapse-toggle"
+                        onClick={() => setShowDamageRunes((v) => !v)}
+                        aria-label={
+                          showDamageRunes ? "Collapse Damage Runes" : "Expand Damage Runes"
+                        }
+                        type="button"
+                      >
+                        <span
+                          className={`optimizer__arrow ${
+                            showDamageRunes
+                              ? "optimizer__arrow--up"
+                              : "optimizer__arrow--down"
+                          }`}
+                        ></span>
+                        <span className="optimizer__toggle-label">Damage Runes</span>
+                      </button>
+                    </div>
+                    <div className={`optimizer__collapsible-section${
+                      showDamageRunes ? " optimizer__collapsible-section--open" : ""
+                    }`}>
+                      {showDamageRunes && (
+                        <div className="optimizer__panel">
+                          <DamageRunes
+                            character={{
+                              ...main,
+                              magic: effectiveMagicLevel,
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="optimizer__col-side optimizer__panel">
-                    <DamageSpells
-                      character={{
-                        ...main,
-                        magic: effectiveMagicLevel,
-                      }}
-                    />
+                  <div className="optimizer__col-side">
+                    <div className="m-b-10">
+                      <button
+                        className="optimizer__collapse-toggle"
+                        onClick={() => setShowDamageSpells((v) => !v)}
+                        aria-label={
+                          showDamageSpells ? "Collapse Damage Spells" : "Expand Damage Spells"
+                        }
+                        type="button"
+                      >
+                        <span
+                          className={`optimizer__arrow ${
+                            showDamageSpells
+                              ? "optimizer__arrow--up"
+                              : "optimizer__arrow--down"
+                          }`}
+                        ></span>
+                        <span className="optimizer__toggle-label">Damage Spells</span>
+                      </button>
+                    </div>
+                    <div className={`optimizer__collapsible-section${
+                      showDamageSpells ? " optimizer__collapsible-section--open" : ""
+                    }`}>
+                      {showDamageSpells && (
+                        <div className="optimizer__panel">
+                          <DamageSpells
+                            character={{
+                              ...main,
+                              magic: effectiveMagicLevel,
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="m-b-10">
@@ -512,7 +568,7 @@ function Form() {
                 >
                   {showCreatures && (
                     <div className="optimizer__panel">
-                      <Creatures />
+                      <Creatures vocation={main.vocation} />
                     </div>
                   )}
                 </div>
