@@ -6,7 +6,7 @@ function Statistics({
   category = "experience",
   vocation = "all",
   page = 1,
-  limit = 10,
+  limit = 50,
 }) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
@@ -80,10 +80,10 @@ function Statistics({
             .slice(0, 5)
             .map((w) =>
               fetchStatistics({
-                world: world,
+                world: w,
                 category: selCategory,
                 vocation: selVocation,
-                page,
+                page: meta.page,
                 limit: Math.ceil(limit / 2),
               })
             );
@@ -95,13 +95,18 @@ function Statistics({
             (a, b) => (b.level ?? b.value ?? 0) - (a.level ?? a.value ?? 0)
           );
           setItems(combined.slice(0, limit));
-          setMeta({ page: 1, totalPages: null, totalRecords: combined.length });
+          setMeta((m) => ({
+            ...m,
+            page: Number(meta.page),
+            totalPages: 20,
+            totalRecords: combined.length,
+          }));
         } else {
           const data = await fetchStatistics({
             world: selWorld,
             category: selCategory,
             vocation: selVocation,
-            page,
+            page: meta.page,
             limit,
           });
           setItems(data.list || []);
@@ -120,8 +125,7 @@ function Statistics({
       }
     };
     getStatistics();
-  }, [selWorld, selCategory, selVocation, page, limit, worlds]);
-
+  }, [selWorld, selCategory, selVocation, meta.page, limit, worlds]);
   const categoryLabel =
     CATEGORY_OPTIONS.find((c) => c.value === selCategory)?.label ?? selCategory;
   const worldLabel = selWorld === "All" ? "All worlds" : selWorld;
@@ -214,7 +218,6 @@ function Statistics({
               </option>
             ))}
           </select>
-          of {meta.totalPages} ({meta.totalRecords ?? 0} records)
         </div>
       ) : null}
     </div>

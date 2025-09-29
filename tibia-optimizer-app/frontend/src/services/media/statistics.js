@@ -22,7 +22,7 @@ export async function fetchStatistics(args = {}) {
   let world,
     category,
     vocation = "all",
-    page = 20,
+    page = 1,
     limit = 50;
 
   if (typeof args === "number") {
