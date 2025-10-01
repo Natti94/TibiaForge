@@ -1,6 +1,6 @@
 export async function fetchCreatures(name = "") {
   if (!name) throw new Error("No creature name provided");
-  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB_URL.replace(/\/$/, "");
   const url = `${base}/v4/creature/${encodeURIComponent(name)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch creature");
@@ -10,9 +10,8 @@ export async function fetchCreatures(name = "") {
   if (!creature) throw new Error("No creature found");
 
   return {
-    name: creature.name,
-    race: creature.race,
     image_url: creature.image_url,
+    name: creature.name,
     hitpoints: creature.hitpoints,
     immune: creature.immune,
     strong: creature.strong,

@@ -5,7 +5,7 @@
  * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object} | string[]>}
  */
 export async function fetchStatistics(args = {}) {
-  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB_URL.replace(/\/$/, "");
 
   if (args.fetchWorlds) {
     const res = await fetch(`${base}/v4/worlds`);

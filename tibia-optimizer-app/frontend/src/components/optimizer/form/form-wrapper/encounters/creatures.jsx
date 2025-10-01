@@ -86,16 +86,8 @@ function Creatures({ vocation }) {
                 />
                 <div className="optimizer__creature-property-box">
                   <p className="optimizer__creature-property">
-                    <strong>Race:</strong>{" "}
-                    {forceCasing(creature.race || "Unknown")}
-                  </p>
-                  <p className="optimizer__creature-property">
                     <strong>Hitpoints:</strong>{" "}
                     {creature.hitpoints || "Unknown"}
-                  </p>
-                  <p className="optimizer__creature-property">
-                    <strong>Description:</strong>{" "}
-                    {creature.description || "None"}
                   </p>
                   {creature.immune && (
                     <p className="optimizer__creature-property">
@@ -109,7 +101,7 @@ function Creatures({ vocation }) {
                       {creature.strong.join(", ") || "None"}
                     </p>
                   )}
-                  {creature.weak && (
+                  {creature.weakness && (
                     <p className="optimizer__creature-property">
                       <strong>Weak:</strong>{" "}
                       {creature.weakness.join(", ") || "None"}

@@ -1,5 +1,5 @@
 export async function fetchNews(limit = 10) {
-  const base = import.meta.env.VITE_API_TIBIA_DB.replace(/\/$/, "");
+  const base = import.meta.env.VITE_API_TIBIA_DB_URL.replace(/\/$/, "");
   const url = `${base}/v4/news/archive`;
   if (!url) throw new Error("News URL not configured");
   const res = await fetch(url);
