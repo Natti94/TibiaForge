@@ -1,15 +1,23 @@
 # Tibia Optimizer
 
-React app to help Tibia players make smarter choices about their character’s stats, equipment, and strategy. Built with Vite + React, ships static, and deploys easily to Netlify.
+React app to help Tibia players make smarter choices about their character’s stats, equipment, and strategy. Built with Vite + React. Ships static and deploys easily to Netlify.
 
 Live: https://tibiaoptimizer.netlify.app
 
-## Repo layout (current)
+## Repository layout
 
-The application lives in the `tibia-optimizer-app/` folder:
+Top-level folders:
 
 ```
-tibia-optimizer-app/
+LICENSE
+README.md
+package.json
+tibia-optimizer-backend/
+	server.js
+	src/
+		db.js
+
+tibia-optimizer-frontend/
 	.env                      # local env (VITE_*)
 	eslint.config.js
 	index.html
@@ -17,14 +25,15 @@ tibia-optimizer-app/
 	vite.config.js
 	netlify/
 		functions/
-			getAssets.js       # Netlify function for prod asset URLs
+			getAssets.js          # Netlify function for prod asset URLs
 	public/
-		_redirects           # SPA routing for Netlify
+		_redirects              # SPA routing for Netlify
 		favicon.ico
 	src/
 		App.jsx
 		main.jsx
 		index.css
+		index.js
 		components/
 			nav/
 				nav.css
@@ -38,12 +47,13 @@ tibia-optimizer-app/
 						donate.jsx
 						support.jsx
 			optimizer/
-				optimizer.jsx
 				optimizer.css
+				optimizer.jsx
 				form/
 					form.jsx
 					form-wrapper/
 						character/
+							abilities.jsx
 							skills.jsx
 							items/
 								equipments.jsx
@@ -51,13 +61,6 @@ tibia-optimizer-app/
 						encounters/
 							creatures.jsx
 							players.jsx
-							character/
-								runes/
-									damageRunes.jsx
-									healingSpells.jsx
-								spells/
-									damageSpells.jsx
-									healingSpells.jsx
 			media/
 				media.css
 				media.jsx
@@ -84,10 +87,10 @@ tibia-optimizer-app/
 					runes.js
 					weapons.js
 			encounters/
-				creatures.js
 				players.js
-		services/
+		db/
 			index.js
+		services/
 			auth/
 				csrf.js
 				http.js
@@ -96,53 +99,58 @@ tibia-optimizer-app/
 			media/
 				news.js
 				statistics.js
-				worlds.js
+			optimizer/
+				creatures.js
 ```
+
+Notes:
+- Frontend is the primary app. The backend folder currently contains an Express server stub (default route, basic error handling). Asset URLs are resolved via a Netlify Function in production.
 
 ## Features
 
-- Optimizer UI: CSGO-inspired circular (radial) menu for section navigation
-  - After clicking **BEGIN**, a circular menu appears, letting you choose between Equipment, Weapon, Skills, Creature, and Runes/Spells
-  - Only one section is visible at a time, making the UI cleaner and more interactive
-  - Styled to match the CSGO buy menu (dark, radial, highlight on hover/click)
-- Encounter helpers: damage/healing Runes and Spells, Creatures, Players
-- Navigation with info pages (About, Contact, Cooperation, Donate, Support)
+- Optimizer UI with a CSGO-style radial menu
+	- Click BEGIN to open an overlay with a circular menu
+	- Center hub selects vocation; slices unlock in order: Skills → Equip → Weapons → Abilities → Creatures
+	- Each completed slice shows a ✓ indicator; only one section window is open at a time
+	- Character Summary appears on the right once all slices are completed (armor, resistances, skills, attack/damage, effective ML)
+- Encounter helpers (Creatures; Players stubbed)
 - Media area: News, Video, Images, and Highscores Statistics
-  - News: simple carousel with prev/next and readable page indicator
-  - Statistics: TibiaData v4 highscores with World/Category/Vocation selects and an "ALL worlds" aggregate view
-- Auth scaffolding: Login/Register views with refined layout
-- Live summary in the Optimizer: armor, resistances, skill totals, attack/damage, effective magic level
-- Cloudinary-hosted assets via `.env` (development) and Netlify Function in production
-- React + Vite + React Router; SPA-friendly `_redirects` for Netlify
+	- Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
+- Navigation with info pages (About, Contact, Cooperation, Donate, Support)
+- Auth scaffolding (Login/Register)
+- Cloudinary-hosted assets via `.env` during dev and Netlify Function in production
+
+## Routing and layout
+
+- The app is wrapped once by a top-level `<BrowserRouter>` in `src/main.jsx`.
+- `src/App.jsx` renders the background, `Nav`, and route outlet. The home route (`/`) shows the Optimizer and Media.
+- `src/components/nav/nav.jsx` defines routes; on the `/` route it renders `<Optimizer />` and `<Media />` together.
+- If you also render `<Media />` directly in `App.jsx`, you will see it twice on the home page—prefer keeping it in one place (usually within the `/` route in `Nav`).
 
 ## Local development
 
-From `tibia-optimizer-app/`:
+Frontend (Vite + React):
 
 ```powershell
-cd tibia-optimizer-app
+cd tibia-optimizer-frontend
 npm install
 npm run dev
 ```
 
 - App runs at http://localhost:5173/
-- Uses Vite; hot reload is on by default
+- SPA redirects are handled by `public/_redirects` in production
 
-## Optimizer Circular Menu Usage
+Backend (optional, stub server):
 
-- Click **BEGIN** to open the optimizer's main interface.
-- The menu will appear, letting you select:
-  - **Equipment**: Manage and optimize your character's gear
-  - **Weapon**: Choose and configure weapons and ammunition
-  - **Skills**: Set and review skill levels
-  - **Creature**: Access the creature search and info panel
-  - **Runes/Spells**: View and optimize runes and spell options
-- Only one section is visible at a time for a focused experience.
-- The menu is fully keyboard and mouse accessible, with visual feedback on hover and selection.
+```powershell
+cd tibia-optimizer-backend
+# ensure a package.json and dependencies if you plan to extend the server
+# node server.js (PORT defaults to 3001)
+```
 
 ## Environment variables
 
-Create `tibia-optimizer-app/.env` with the assets you use in the UI (examples):
+Create `tibia-optimizer-frontend/.env` with the assets you use in the UI (examples):
 
 ```
 # Optional TibiaData base (defaults to https://api.tibiadata.com)
@@ -168,13 +176,24 @@ In development the app reads directly from these URLs. In production (Netlify), 
 ## Build and deploy (Netlify)
 
 ```powershell
-cd tibia-optimizer-app
+cd tibia-optimizer-frontend
 npm run build
 ```
 
 - Publish directory: `dist`
 - Ensure `public/_redirects` is included (Vite copies it to `dist/`)
-- Optional: configure a Netlify Function for asset indirection (see `netlify/functions/getAssets.js`)
+- Optional: configure/enable the Netlify Function for asset indirection (see `netlify/functions/getAssets.js`)
+
+## Maintenance scripts
+
+- Remove comments (JS/JSX/CSS/HTML) across the repo:
+
+```powershell
+cd tibia-optimizer-frontend
+npm run strip:comments
+```
+
+This runs `scripts/removeComments.mjs` and modifies files in place (excluding node_modules, dist, etc.).
 
 ## Troubleshooting
 
