@@ -104,18 +104,19 @@ tibia-optimizer-frontend/
 ```
 
 Notes:
+
 - Frontend is the primary app. The backend folder currently contains an Express server stub (default route, basic error handling). Asset URLs are resolved via a Netlify Function in production.
 
 ## Features
 
 - Optimizer UI with a CSGO-style radial menu
-	- Click BEGIN to open an overlay with a circular menu
-	- Center hub selects vocation; slices unlock in order: Skills → Equip → Weapons → Abilities → Creatures
-	- Each completed slice shows a ✓ indicator; only one section window is open at a time
-	- Character Summary appears on the right once all slices are completed (armor, resistances, skills, attack/damage, effective ML)
+  - Click BEGIN to open an overlay with a circular menu
+  - Center hub selects vocation; slices unlock in order: Skills → Equip → Weapons → Abilities → Creatures
+  - Each completed slice shows a ✓ indicator; only one section window is open at a time
+  - Character Summary appears on the right once all slices are completed (armor, resistances, skills, attack/damage, effective ML)
 - Encounter helpers (Creatures; Players stubbed)
 - Media area: News, Video, Images, and Highscores Statistics
-	- Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
+  - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
 - Navigation with info pages (About, Contact, Cooperation, Donate, Support)
 - Auth scaffolding (Login/Register)
 - Cloudinary-hosted assets via `.env` during dev and Netlify Function in production
