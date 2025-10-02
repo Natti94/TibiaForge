@@ -99,23 +99,21 @@ tibia-optimizer-app/
 				worlds.js
 ```
 
-
 ## Features
 
 - Optimizer UI: CSGO-inspired circular (radial) menu for section navigation
-	- After clicking **BEGIN**, a circular menu appears, letting you choose between Equipment, Weapon, Skills, Creature, and Runes/Spells
-	- Only one section is visible at a time, making the UI cleaner and more interactive
-	- Styled to match the CSGO buy menu (dark, radial, highlight on hover/click)
+  - After clicking **BEGIN**, a circular menu appears, letting you choose between Equipment, Weapon, Skills, Creature, and Runes/Spells
+  - Only one section is visible at a time, making the UI cleaner and more interactive
+  - Styled to match the CSGO buy menu (dark, radial, highlight on hover/click)
 - Encounter helpers: damage/healing Runes and Spells, Creatures, Players
 - Navigation with info pages (About, Contact, Cooperation, Donate, Support)
 - Media area: News, Video, Images, and Highscores Statistics
-	- News: simple carousel with prev/next and readable page indicator
-	- Statistics: TibiaData v4 highscores with World/Category/Vocation selects and an "ALL worlds" aggregate view
+  - News: simple carousel with prev/next and readable page indicator
+  - Statistics: TibiaData v4 highscores with World/Category/Vocation selects and an "ALL worlds" aggregate view
 - Auth scaffolding: Login/Register views with refined layout
 - Live summary in the Optimizer: armor, resistances, skill totals, attack/damage, effective magic level
 - Cloudinary-hosted assets via `.env` (development) and Netlify Function in production
 - React + Vite + React Router; SPA-friendly `_redirects` for Netlify
-
 
 ## Local development
 
@@ -133,12 +131,12 @@ npm run dev
 ## Optimizer Circular Menu Usage
 
 - Click **BEGIN** to open the optimizer's main interface.
-- The CSGO-style circular menu will appear, letting you select:
-	- **Equipment**: Manage and optimize your character's gear
-	- **Weapon**: Choose and configure weapons and ammunition
-	- **Skills**: Set and review skill levels
-	- **Creature**: Access the creature search and info panel
-	- **Runes/Spells**: View and optimize runes and spell options
+- The menu will appear, letting you select:
+  - **Equipment**: Manage and optimize your character's gear
+  - **Weapon**: Choose and configure weapons and ammunition
+  - **Skills**: Set and review skill levels
+  - **Creature**: Access the creature search and info panel
+  - **Runes/Spells**: View and optimize runes and spell options
 - Only one section is visible at a time for a focused experience.
 - The menu is fully keyboard and mouse accessible, with visual feedback on hover and selection.
 
