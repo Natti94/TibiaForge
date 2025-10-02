@@ -82,11 +82,11 @@ function CircleMenu({
     const dx = e.clientX - cx;
     const dy = e.clientY - cy;
     const r = Math.sqrt(dx * dx + dy * dy);
-    const innerRadius = Math.min(rect.width, rect.height) * 0.18; // avoid center clicks
-    if (r < innerRadius) return; // ignore clicks in the center hub
+    const innerRadius = Math.min(rect.width, rect.height) * 0.18;
+    if (r < innerRadius) return;
 
-    const angle = (Math.atan2(dy, dx) * 180) / Math.PI; // -180..180
-    const deg = (angle + 360 + 90) % 360; // rotate so 0deg is up
+    const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+    const deg = (angle + 360 + 90) % 360;
     const index = Math.floor(deg / sliceDeg);
     const item = items[index];
     if (item && item.enabled) onSelect(item.key);

@@ -9,20 +9,7 @@ function Nav() {
   return (
     <div className="nav">
       <Pages />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Optimizer />
-              <Media />
-            </>
-          }
-        />
-        <Route path="/login" element={<Auth />} />
-        <Route path="/register" element={<Auth />} />
-      </Routes>
-    </div>
+      </div>
   );
 }
 
