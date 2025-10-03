@@ -1,8 +1,8 @@
-function Contact() {
+function Guides() {
   return (
     <div className="page">
       <div className="page__card">
-        <h1>Contact</h1>
+        <h1>Guides</h1>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sed
           augue non ipsum dictum mattis. Vivamus maximus sapien sit amet
@@ -19,4 +19,4 @@ function Contact() {
     </div>
   );
 }
-export default Contact;
+export default Guides;

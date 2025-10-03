@@ -12,6 +12,8 @@ Top-level folders:
 LICENSE
 README.md
 package.json
+.vscode/
+	settings.json             # Prettier as default formatter + format-on-save
 tibia-optimizer-backend/
 	server.js
 	src/
@@ -23,6 +25,9 @@ tibia-optimizer-frontend/
 	index.html
 	package.json
 	vite.config.js
+	scripts/
+		removeComments.mjs    # strip comments across repo
+		formatRepo.mjs        # Prettier format across repo
 	netlify/
 		functions/
 			getAssets.js          # Netlify function for prod asset URLs
@@ -43,9 +48,9 @@ tibia-optimizer-frontend/
 					pages-wrapper/
 						about.jsx
 						contact.jsx
-						cooperation.jsx
+						cooperations.jsx
 						donate.jsx
-						support.jsx
+						guides.jsx
 			optimizer/
 				optimizer.css
 				optimizer.jsx
@@ -88,8 +93,6 @@ tibia-optimizer-frontend/
 					weapons.js
 			encounters/
 				players.js
-		db/
-			index.js
 		services/
 			auth/
 				csrf.js
@@ -113,11 +116,12 @@ Notes:
   - Click BEGIN to open an overlay with a circular menu
   - Center hub selects vocation; slices unlock in order: Skills → Equip → Weapons → Abilities → Creatures
   - Each completed slice shows a ✓ indicator; only one section window is open at a time
+  - SVG-based wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center
   - Character Summary appears on the right once all slices are completed (armor, resistances, skills, attack/damage, effective ML)
 - Encounter helpers (Creatures; Players stubbed)
 - Media area: News, Video, Images, and Highscores Statistics
   - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
-- Navigation with info pages (About, Contact, Cooperation, Donate, Support)
+- Navigation with info pages (About, Contact, Cooperations, Donate, Guides)
 - Auth scaffolding (Login/Register)
 - Cloudinary-hosted assets via `.env` during dev and Netlify Function in production
 
@@ -195,6 +199,25 @@ npm run strip:comments
 ```
 
 This runs `scripts/removeComments.mjs` and modifies files in place (excluding node_modules, dist, etc.).
+
+- Format the entire repo with Prettier:
+
+```powershell
+cd tibia-optimizer-frontend
+npm run format:repo
+```
+
+- Strip comments and then format (recommended):
+
+```powershell
+cd tibia-optimizer-frontend
+npm run sanitize
+```
+
+Editor tips:
+
+- Alt+Shift+F formats the current file in VS Code.
+- This workspace sets Prettier as the default formatter and enables format-on-save (see `.vscode/settings.json`).
 
 ## Troubleshooting
 

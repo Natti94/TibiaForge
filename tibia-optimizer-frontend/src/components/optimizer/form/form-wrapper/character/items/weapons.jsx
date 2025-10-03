@@ -32,7 +32,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
             item.name &&
             ((item.skills &&
               Object.prototype.hasOwnProperty.call(item.skills, t)) ||
-              s(item.name).includes(t))
+              s(item.name).includes(t)),
         )
         .map((item) => item.name);
     } else if (t === "wand") {
@@ -50,7 +50,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
         .filter((item) =>
           isArrow
             ? s(item.name).includes("arrow")
-            : s(item.name).includes("bolt")
+            : s(item.name).includes("bolt"),
         )
         .map((item) => item.name);
     } else {
@@ -67,7 +67,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
   };
 
   const selectedWeaponObj = weaponsList.find(
-    (item) => item.name === weapon.weapon
+    (item) => item.name === weapon.weapon,
   );
   const selectedName = (weapon.weapon || "").toLowerCase();
   const isCrossbow =
@@ -164,7 +164,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
                       <option key={name} value={name}>
                         {name}
                       </option>
-                    ))
+                    )),
                   )}
                 </select>
               </label>
@@ -186,7 +186,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
                         <option key={name} value={name}>
                           {name}
                         </option>
-                      ))
+                      )),
                     )}
                   </select>
                 </label>
@@ -246,7 +246,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
                       <option key={name} value={name}>
                         {name}
                       </option>
-                    ))
+                    )),
                   )}
                 </select>
               </label>
@@ -267,7 +267,7 @@ function Weapons({ vocation, weapon, setWeapon }) {
                       <option key={name} value={name}>
                         {name}
                       </option>
-                    ))
+                    )),
                   )}
                 </select>
               </label>

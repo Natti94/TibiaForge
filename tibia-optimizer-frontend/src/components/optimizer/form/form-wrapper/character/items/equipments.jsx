@@ -32,7 +32,7 @@ function Equipments({ vocation, equipment, setEquipment }) {
         apiNames = data
           .filter(
             (item) =>
-              item.type && item.type.toLowerCase() === "quiver" && item.name
+              item.type && item.type.toLowerCase() === "quiver" && item.name,
           )
           .map((item) => item.name);
       } else if (vocation === "paladin" && paladinMode === "before 12.5") {
@@ -41,14 +41,14 @@ function Equipments({ vocation, equipment, setEquipment }) {
         apiNames = data
           .filter(
             (item) =>
-              item.type && item.type.toLowerCase() === "shield" && item.name
+              item.type && item.type.toLowerCase() === "shield" && item.name,
           )
           .map((item) => item.name);
       } else if (vocation === "sorcerer" || vocation === "druid") {
         apiNames = data
           .filter(
             (item) =>
-              item.type && item.type.toLowerCase() === "spellbook" && item.name
+              item.type && item.type.toLowerCase() === "spellbook" && item.name,
           )
           .map((item) => item.name);
       } else {
@@ -58,14 +58,14 @@ function Equipments({ vocation, equipment, setEquipment }) {
               item.type &&
               (item.type.toLowerCase() === "quiver" ||
                 item.type.toLowerCase() === "shield") &&
-              item.name
+              item.name,
           )
           .map((item) => item.name);
       }
     } else {
       apiNames = data
         .filter(
-          (item) => item.type && item.type.toLowerCase() === type && item.name
+          (item) => item.type && item.type.toLowerCase() === type && item.name,
         )
         .map((item) => item.name);
     }
@@ -77,7 +77,7 @@ function Equipments({ vocation, equipment, setEquipment }) {
 
   const getSelectedEquipmentObj = (type) =>
     (Array.isArray(equipmentsList) ? equipmentsList : []).find(
-      (item) => item.name === equipment[type]
+      (item) => item.name === equipment[type],
     );
 
   const handleChange = (field) => (event) => {

@@ -1,0 +1,9 @@
+{
+  // Use Prettier as the default formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Format on save for quick feedback
+  "editor.formatOnSave": true,
+  // Optional: format on paste/type for aggressive consistency
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false
+}

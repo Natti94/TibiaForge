@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Optimizer from "./components/optimizer/optimizer";
 import Auth from "./components/auth/auth";
 import Nav from "./components/nav/nav";

@@ -39,21 +39,19 @@ export async function handler(event) {
   if (!url) {
     console.error(
       `Asset '${asset}' not found or environment variable not set. Available assets: ${Object.keys(
-        assetPaths
-      ).join(", ")}`
+        assetPaths,
+      ).join(", ")}`,
     );
     return {
       statusCode: 400,
       body: JSON.stringify({
         error: `Asset '${asset}' not found or environment variable not set. Available assets: ${Object.keys(
-          assetPaths
+          assetPaths,
         ).join(", ")}`,
       }),
     };
   }
 
-  // Optional debug log (kept minimal). Uncomment if tracing redirects locally.
-  // console.debug(`Redirecting to asset: ${asset}`);
   return {
     statusCode: 302,
     headers: {

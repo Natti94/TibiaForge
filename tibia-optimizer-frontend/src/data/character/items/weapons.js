@@ -87,8 +87,7 @@ export const weaponsList = [
     skills: { sword: 0 },
     version: "before 11.40",
   },
-  //----------------------------
-  // AXES
+
   {
     name: "Axe",
     type: "weapon",
@@ -133,8 +132,7 @@ export const weaponsList = [
     skills: { axe: 0 },
     version: "before 11.40",
   },
-  //----------------------------
-  // CLUBS
+
   {
     name: "Mace",
     type: "weapon",
@@ -179,8 +177,7 @@ export const weaponsList = [
     skills: { club: 0 },
     version: "before 11.40",
   },
-  //----------------------------
-  // CROSSBOWS & BOLTS
+
   {
     name: "Crossbow",
     type: "crossbow",
@@ -280,8 +277,7 @@ export const weaponsList = [
     resistance: {},
     skills: { distance: 0 },
   },
-  //----------------------------
-  // BOWS & ARROWS
+
   {
     name: "Bow",
     type: "bow",
@@ -435,8 +431,7 @@ export const weaponsList = [
     resistance: {},
     skills: { distance: 0 },
   },
-  //----------------------------
-  // THROWING WEAPONS
+
   {
     name: "Assassin Star",
     type: "weapon",
@@ -500,8 +495,7 @@ export const weaponsList = [
     skills: { distance: 0 },
     version: "before 11.40",
   },
-  //----------------------------
-  // WANDS
+
   {
     name: "Wand of Vortex",
     type: "weapon",
@@ -613,8 +607,7 @@ export const weaponsList = [
     skills: { magicLevel: 3 },
     version: "before 11.40",
   },
-  //----------------------------
-  // RODS
+
   {
     name: "Snakebite Rod",
     type: "weapon",
@@ -725,5 +718,4 @@ export const weaponsList = [
     skills: { magicLevel: 3 },
     version: "before 11.40",
   },
-  //----------------------------
 ];

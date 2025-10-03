@@ -20,7 +20,7 @@ function Register() {
       setTimeout(() => navigate("/login"), 1000);
     } catch (err) {
       setError(
-        "Registration failed. Try another username/email or check your input."
+        "Registration failed. Try another username/email or check your input.",
       );
     }
   }

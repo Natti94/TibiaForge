@@ -21,30 +21,13 @@ function CircleMenu({
   const [size, setSize] = useState(0);
 
   const sliceDeg = 360 / items.length;
-  const gradient = useMemo(() => {
-    const sep = 1.2;
-    const stops = items
-      .map((it, i) => {
-        const start = i * sliceDeg;
-        const end = (i + 1) * sliceDeg;
-        const sliceStart = start;
-        const sliceEnd = end - sep;
-        const separatorStart = end - sep;
-        const separatorEnd = end;
-        const fill = it.enabled
-          ? "rgba(0, 255, 255, 0.08)"
-          : "rgba(180, 180, 180, 0.08)";
-        const sepColor = "rgba(255, 140, 0, 0.35)";
-        return [
-          `${fill} ${sliceStart}deg`,
-          `${fill} ${sliceEnd}deg`,
-          `${sepColor} ${separatorStart}deg`,
-          `${sepColor} ${separatorEnd}deg`,
-        ].join(", ");
-      })
-      .join(", ");
-    return `conic-gradient(${stops})`;
-  }, [items.length, sliceDeg]);
+  const rOuter = useMemo(() => (size > 0 ? size / 2 - 4 : 150), [size]);
+  const rInner = useMemo(
+    () => (size > 0 ? Math.max(size * 0.26, 120) : 120),
+    [size],
+  );
+  const cx = useMemo(() => (size > 0 ? size / 2 : 150), [size]);
+  const cy = cx;
 
   useEffect(() => {
     const update = () => {
@@ -60,10 +43,10 @@ function CircleMenu({
     if (!interactive) return;
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
+    const cxp = rect.left + rect.width / 2;
+    const cyp = rect.top + rect.height / 2;
+    const dx = e.clientX - cxp;
+    const dy = e.clientY - cyp;
     const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
     const deg = (angle + 360 + 90) % 360;
     const index = Math.floor(deg / sliceDeg);
@@ -77,14 +60,13 @@ function CircleMenu({
     if (!interactive) return;
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
+    const cxp = rect.left + rect.width / 2;
+    const cyp = rect.top + rect.height / 2;
+    const dx = e.clientX - cxp;
+    const dy = e.clientY - cyp;
     const r = Math.sqrt(dx * dx + dy * dy);
-    const innerRadius = Math.min(rect.width, rect.height) * 0.18;
+    const innerRadius = Math.max(Math.min(rect.width, rect.height) * 0.26, 120);
     if (r < innerRadius) return;
-
     const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
     const deg = (angle + 360 + 90) % 360;
     const index = Math.floor(deg / sliceDeg);
@@ -92,17 +74,93 @@ function CircleMenu({
     if (item && item.enabled) onSelect(item.key);
   };
 
+  const polarToCartesian = (cx, cy, r, deg) => {
+    const rad = ((deg - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  };
+  const arcPath = (cx, cy, rOuter, rInner, startAngle, endAngle) => {
+    const startOuter = polarToCartesian(cx, cy, rOuter, endAngle);
+    const endOuter = polarToCartesian(cx, cy, rOuter, startAngle);
+    const startInner = polarToCartesian(cx, cy, rInner, startAngle);
+    const endInner = polarToCartesian(cx, cy, rInner, endAngle);
+    const largeArc = endAngle - startAngle <= 180 ? 0 : 1;
+    return [
+      `M ${startOuter.x} ${startOuter.y}`,
+      `A ${rOuter} ${rOuter} 0 ${largeArc} 0 ${endOuter.x} ${endOuter.y}`,
+      `L ${startInner.x} ${startInner.y}`,
+      `A ${rInner} ${rInner} 0 ${largeArc} 1 ${endInner.x} ${endInner.y}`,
+      "Z",
+    ].join(" ");
+  };
+
   return (
     <div
       className="optimizer__circle"
       ref={ref}
-      style={{ backgroundImage: gradient }}
       onMouseMove={onPointerMove}
       onMouseLeave={onPointerLeave}
       onMouseUp={onPointerUp}
       role="menu"
       aria-label="Choose section"
     >
+      <svg
+        className="optimizer__circle-svg"
+        width={size || 300}
+        height={size || 300}
+        viewBox={`0 0 ${size || 300} ${size || 300}`}
+        aria-hidden="true"
+      >
+        {items.map((it, i) => {
+          const start = i * sliceDeg;
+          const end = (i + 1) * sliceDeg;
+          const fill = it.enabled
+            ? "rgba(0, 255, 255, 0.08)"
+            : "rgba(180, 180, 180, 0.08)";
+          const d = arcPath(cx, cy, rOuter, rInner, start, end);
+          return (
+            <path
+              key={`slice-${it.key}`}
+              d={d}
+              fill={fill}
+              pointerEvents={interactive && it.enabled ? "auto" : "none"}
+              onMouseEnter={() => it.enabled && interactive && setHoverIndex(i)}
+              onMouseLeave={() => setHoverIndex((hi) => (hi === i ? null : hi))}
+              onClick={() => it.enabled && interactive && onSelect(it.key)}
+              style={{
+                cursor: it.enabled && interactive ? "pointer" : "default",
+              }}
+            />
+          );
+        })}
+        {items.map((_, i) => {
+          const a = i * sliceDeg;
+          const p1 = polarToCartesian(cx, cy, rInner, a);
+          const p2 = polarToCartesian(cx, cy, rOuter, a);
+          return (
+            <line
+              key={`sep-${i}`}
+              x1={p1.x}
+              y1={p1.y}
+              x2={p2.x}
+              y2={p2.y}
+              stroke="rgba(255, 140, 0, 0.9)"
+              strokeWidth={2}
+              strokeLinecap="round"
+              shapeRendering="geometricPrecision"
+              pointerEvents="none"
+            />
+          );
+        })}
+        {hoverIndex != null &&
+          (() => {
+            const start = hoverIndex * sliceDeg;
+            const end = (hoverIndex + 1) * sliceDeg;
+            const d = arcPath(cx, cy, rOuter, rInner, start, end);
+            return (
+              <path d={d} fill="rgba(0,255,255,0.22)" pointerEvents="none" />
+            );
+          })()}
+      </svg>
       <div className="optimizer__circle-center">
         <div className="optimizer__circle-center-content">
           <label className="optimizer__circle-vocation-label">Vocation</label>
@@ -147,12 +205,6 @@ function CircleMenu({
           );
         })}
       </div>
-      {hoverIndex != null && (
-        <div
-          className="optimizer__circle-highlight"
-          style={{ transform: `rotate(${hoverIndex * sliceDeg}deg)` }}
-        />
-      )}
     </div>
   );
 }
@@ -223,7 +275,6 @@ function Form() {
     return str.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
   }
 
-  // Aggregations for summary
   let totalArmor = 0;
   let totalAllResistance = 0;
   let totalSpecificResistance = {};
@@ -255,10 +306,10 @@ function Form() {
   });
 
   const selectedWeaponObj = weaponsList.find(
-    (item) => item.name === weapon.weapon
+    (item) => item.name === weapon.weapon,
   );
   const selectedAmmoObj = weaponsList.find(
-    (item) => item.name === weapon.ammunition
+    (item) => item.name === weapon.ammunition,
   );
 
   const avgDamage = (dmg) => {
@@ -285,7 +336,7 @@ function Form() {
       Object.entries(selectedWeaponObj.resistance).forEach(
         ([element, value]) => {
           addTo(totalSpecificResistance, element, value);
-        }
+        },
       );
     }
     if (selectedWeaponObj.skills) {
@@ -565,7 +616,7 @@ function Form() {
                                 <li key={element}>
                                   {forceCasing(element)}: {value}%
                                 </li>
-                              )
+                              ),
                             )}
                           </ul>
                         </li>
@@ -575,7 +626,7 @@ function Form() {
                             {Object.entries(skillSum)
                               .filter(
                                 ([skill]) =>
-                                  skill !== "attack" && skill !== "damage"
+                                  skill !== "attack" && skill !== "damage",
                               )
                               .map(([skill, value]) => (
                                 <li key={skill}>

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
+import About from "./pages-wrapper/about";
+import Guides from "./pages-wrapper/guides";
+import Cooperations from "./pages-wrapper/cooperations";
+import Contact from "./pages-wrapper/contact";
+import Donate from "./pages-wrapper/donate";
 
 function Pages() {
   const [collapsed, setCollapsed] = useState(false);
@@ -31,7 +36,7 @@ function Pages() {
   };
 
   return (
-<div>
+    <div>
       <nav className={`pages__nav${collapsed ? " pages__nav--collapsed" : ""}`}>
         <img
           className="pages__nav-image-top"
@@ -83,6 +88,7 @@ function Pages() {
               <span>Guides</span>
             </Link>
           </li>
+
           <li className="pages__nav-item">
             <Link to="/cooperations" className="pages__nav-link">
               <img
@@ -117,6 +123,13 @@ function Pages() {
           </li>
         </ul>
       </nav>
+      <Routes>
+        <Route path="/about" element={<About />} />
+        <Route path="/guides" element={<Guides />} />
+        <Route path="/cooperations" element={<Cooperations />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/donate" element={<Donate />} />
+      </Routes>
     </div>
   );
 }

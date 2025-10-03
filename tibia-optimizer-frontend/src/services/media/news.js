@@ -49,7 +49,7 @@ export async function fetchNews(limit = 10) {
         url_api: item.url_api,
         image,
       };
-    })
+    }),
   );
 
   return enriched;

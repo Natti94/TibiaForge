@@ -1,5 +1,4 @@
 export const spellsList = [
-  
   {
     name: "Exori",
     type: "offensive",
@@ -9,6 +8,4 @@ export const spellsList = [
     minFactor: 1.1,
     maxFactor: 1.9,
   },
-
-  
 ];

@@ -1,9 +1,3 @@
-/**
- * Fetch highscores or worlds using TibiaData v4 API
- * @param {number|{world:string,category:string,vocation?:string,page?:number,limit?:number,fetchWorlds?:boolean}} args
- * If number: treated as limit (slice highscore list). If object: provide { world, category } and optional { vocation, page, limit } for highscores, or { fetchWorlds: true } for worlds.
- * @returns {Promise<{list: Array, page: number, totalPages: number|null, totalRecords: number|null, category: string, vocation: string, world: string, age?: number, information?: object} | string[]>}
- */
 export async function fetchStatistics(args = {}) {
   const base = import.meta.env.VITE_API_TIBIA_DB_URL.replace(/\/$/, "");
 
@@ -33,14 +27,14 @@ export async function fetchStatistics(args = {}) {
 
   if (!world || !category) {
     throw new Error(
-      "fetchStatistics requires { world, category } for highscores"
+      "fetchStatistics requires { world, category } for highscores",
     );
   }
 
   const url = `${base}/v4/highscores/${encodeURIComponent(
-    world
+    world,
   )}/${encodeURIComponent(category)}/${encodeURIComponent(
-    vocation
+    vocation,
   )}/${encodeURIComponent(page)}`;
 
   const res = await fetch(url);

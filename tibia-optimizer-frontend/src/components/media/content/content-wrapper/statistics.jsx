@@ -85,14 +85,14 @@ function Statistics({
                 vocation: selVocation,
                 page: meta.page,
                 limit: Math.ceil(limit / 2),
-              })
+              }),
             );
           const results = await Promise.allSettled(promises);
           const combined = results
             .filter((r) => r.status === "fulfilled")
             .flatMap((r) => r.value.list || []);
           combined.sort(
-            (a, b) => (b.level ?? b.value ?? 0) - (a.level ?? a.value ?? 0)
+            (a, b) => (b.level ?? b.value ?? 0) - (a.level ?? a.value ?? 0),
           );
           setItems(combined.slice(0, limit));
           setMeta((m) => ({

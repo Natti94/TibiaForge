@@ -29,11 +29,11 @@ function Abilities({ character }) {
     if (item.minSubtract !== undefined || item.maxSubtract !== undefined) {
       const min = Math.floor(
         ((item.minFactor || 0) * MAGIC_FORMULA - (item.minSubtract || 0)) *
-          magicMod
+          magicMod,
       );
       const max = Math.floor(
         ((item.maxFactor || 0) * MAGIC_FORMULA - (item.maxSubtract || 0)) *
-          magicMod
+          magicMod,
       );
       return { min, max };
     }
@@ -103,7 +103,7 @@ function Abilities({ character }) {
                     value={selectedRune ? selectedRune.name : ""}
                     onChange={(e) => {
                       const rune = runesList.find(
-                        (r) => r.name === e.target.value
+                        (r) => r.name === e.target.value,
                       );
                       setSelectedRune(rune || null);
                     }}
@@ -135,7 +135,7 @@ function Abilities({ character }) {
                     onChange={(e) =>
                       setSelectedSpell(
                         spellsList.find((s) => s.name === e.target.value) ||
-                          null
+                          null,
                       )
                     }
                   >
@@ -144,7 +144,7 @@ function Abilities({ character }) {
                       .filter(
                         (spell) =>
                           !spell.vocations ||
-                          spell.vocations.includes(character.vocation)
+                          spell.vocations.includes(character.vocation),
                       )
                       .map((spell) => (
                         <option key={spell.name} value={spell.name}>
