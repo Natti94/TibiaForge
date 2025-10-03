@@ -23,8 +23,8 @@ function CircleMenu({
   const sliceDeg = 360 / items.length;
   const rOuter = useMemo(() => (size > 0 ? size / 2 - 4 : 150), [size]);
   const rInner = useMemo(
-    () => (size > 0 ? Math.max(size * 0.26, 120) : 120),
-    [size],
+    () => (size > 0 ? Math.max(size * 0.25, 120) : 120),
+    [size]
   );
   const cx = useMemo(() => (size > 0 ? size / 2 : 150), [size]);
   const cy = cx;
@@ -245,7 +245,7 @@ function Form() {
   const [intro, setIntro] = useState(true);
   const [showScroll, setShowScroll] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [activeWindow, setActiveWindow] = useState(null); // skills|equipments|weapons|abilities|creatures
+  const [activeWindow, setActiveWindow] = useState(null);
   const [completed, setCompleted] = useState({
     skills: false,
     equipments: false,
@@ -306,10 +306,10 @@ function Form() {
   });
 
   const selectedWeaponObj = weaponsList.find(
-    (item) => item.name === weapon.weapon,
+    (item) => item.name === weapon.weapon
   );
   const selectedAmmoObj = weaponsList.find(
-    (item) => item.name === weapon.ammunition,
+    (item) => item.name === weapon.ammunition
   );
 
   const avgDamage = (dmg) => {
@@ -336,7 +336,7 @@ function Form() {
       Object.entries(selectedWeaponObj.resistance).forEach(
         ([element, value]) => {
           addTo(totalSpecificResistance, element, value);
-        },
+        }
       );
     }
     if (selectedWeaponObj.skills) {
@@ -616,7 +616,7 @@ function Form() {
                                 <li key={element}>
                                   {forceCasing(element)}: {value}%
                                 </li>
-                              ),
+                              )
                             )}
                           </ul>
                         </li>
@@ -626,7 +626,7 @@ function Form() {
                             {Object.entries(skillSum)
                               .filter(
                                 ([skill]) =>
-                                  skill !== "attack" && skill !== "damage",
+                                  skill !== "attack" && skill !== "damage"
                               )
                               .map(([skill, value]) => (
                                 <li key={skill}>

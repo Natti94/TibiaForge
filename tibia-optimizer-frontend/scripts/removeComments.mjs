@@ -1,11 +1,11 @@
-// How to run (Windows PowerShell):
-// 1) From the frontend folder:
+// This script removes comments from JS/JSX/CSS/HTML across the repo (excluding node_modules, dist, etc.).
+// How to run - Windows PowerShell/Git Bash:
+//    From the frontend folder:
 //    npm run strip:comments
 //
-// 2) Or run directly with Node:
+//    Or run directly with Node:
 //    node ./scripts/removeComments.mjs
 //
-// This script removes comments from JS/JSX/CSS/HTML across the repo (excluding node_modules, dist, etc.).
 
 import { promises as fs } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -18,7 +18,11 @@ const __filename = fileURLToPath(import.meta.url);
 const scriptDir = path.dirname(__filename);
 const repoRoot = path.resolve(scriptDir, "..", "..");
 
-const globs = ["**/*.js", "**/*.jsx", "**/*.css", "**/*.html"];
+const globs = [
+  "**/components/**/*.{js,jsx,css,html}",
+  "**/data/**/*.{js,jsx,css,html}",
+  "**/services/**/*.{js,jsx,css,html}",
+];
 
 const ignore = [
   "**/node_modules/**",
@@ -68,29 +72,56 @@ async function main() {
   });
   let changed = 0;
   let total = 0;
-  const targetCss = path
+  const extCounts = new Map();
+  const stillHasComment = [];
+  const formPath = path
     .join(
       repoRoot,
       "tibia-optimizer-frontend",
       "src",
       "components",
       "optimizer",
-      "optimizer.css"
+      "form",
+      "form.jsx"
     )
     .toLowerCase();
   console.log("[strip] Root:", repoRoot);
-  console.log("[strip] Files matched:", entries.length);
+  console.log(
+    "[strip] Files matched (components/data/services only):",
+    entries.length
+  );
   for (const file of entries) {
     total += 1;
-    if (file.toLowerCase() === targetCss) {
-      console.log("[strip] Matched optimizer.css");
+    const lower = file.toLowerCase();
+    if (lower === formPath) {
+      console.log("[strip] Matched form.jsx");
     }
     const before = await fs.readFile(file, "utf8");
     await processFile(file);
     const after = await fs.readFile(file, "utf8");
     if (after !== before) changed += 1;
+    const ext = path.extname(file).toLowerCase();
+    extCounts.set(ext, (extCounts.get(ext) || 0) + 1);
+    // Simple residual comment heuristic
+    if (/\/\//.test(after) || /\/\*/.test(after) || /<!--/.test(after)) {
+      stillHasComment.push(path.relative(repoRoot, file));
+    }
   }
   console.log(`[strip] Done. Processed: ${total}, Changed: ${changed}`);
+  console.log(
+    "[strip] File counts by extension:",
+    Object.fromEntries(extCounts.entries())
+  );
+  if (stillHasComment.length) {
+    console.log(
+      "[strip] Files that may still contain comment markers (heuristic):"
+    );
+    for (const f of stillHasComment.slice(0, 40)) console.log("  -", f);
+    if (stillHasComment.length > 40)
+      console.log(`  ... and ${stillHasComment.length - 40} more`);
+  } else {
+    console.log("[strip] Heuristic: No remaining comment markers detected.");
+  }
 }
 
 main().catch((err) => {

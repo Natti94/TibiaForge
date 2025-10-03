@@ -205,6 +205,7 @@
 }
 
 @keyframes lightning-smoke {
+
   0%,
   100% {
     opacity: 0;
@@ -622,12 +623,10 @@ input[type="number"].optimizer__skill-input {
   width: 230px;
   height: 230px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 255, 255, 0.06),
-    rgba(0, 0, 0, 0.35)
-  );
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: radial-gradient(circle at 50% 50%,
+      rgba(255, 255, 255, 0.06),
+      rgba(0, 0, 0, 0.35));
+  border: 2px solid rgba(255, 140, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -675,11 +674,9 @@ input[type="number"].optimizer__skill-input {
 .optimizer__circle-highlight {
   position: absolute;
   inset: 0;
-  background: conic-gradient(
-    rgba(0, 255, 255, 0.2) 0deg,
-    rgba(0, 255, 255, 0.2) 60deg,
-    transparent 60deg 360deg
-  );
+  background: conic-gradient(rgba(0, 255, 255, 0.2) 0deg,
+      rgba(0, 255, 255, 0.2) 60deg,
+      transparent 60deg 360deg);
   pointer-events: none;
   mix-blend-mode: screen;
 }
