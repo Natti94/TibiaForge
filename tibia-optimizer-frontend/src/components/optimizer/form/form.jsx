@@ -1,257 +1,26 @@
 import { useState, useEffect } from "react";
-import { useMemo, useRef } from "react";
 import { equipmentsList } from "../../../data/character/items/equipments";
 import { weaponsList } from "../../../data/character/items/weapons";
-import Skills from "./form-wrapper/character/skills";
-import Equipments from "./form-wrapper/character/items/equipments";
-import Weapons from "./form-wrapper/character/items/weapons";
-import Abilities from "./form-wrapper/character/abilities";
-import Creatures from "./form-wrapper/encounters/creatures";
-
-function CircleMenu({
-  items,
-  onSelect,
-  onClose,
-  vocation,
-  onVocationChange,
-  interactive = true,
-}) {
-  const ref = useRef(null);
-  const [hoverIndex, setHoverIndex] = useState(null);
-  const [size, setSize] = useState(0);
-
-  const sliceDeg = 360 / items.length;
-  const rOuter = useMemo(() => (size > 0 ? size / 2 - 4 : 150), [size]);
-  const rInner = useMemo(
-    () => (size > 0 ? Math.max(size * 0.25, 120) : 120),
-    [size]
-  );
-  const cx = useMemo(() => (size > 0 ? size / 2 : 150), [size]);
-  const cy = cx;
-
-  useEffect(() => {
-    const update = () => {
-      if (!ref.current) return;
-      setSize(ref.current.getBoundingClientRect().width);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const onPointerMove = (e) => {
-    if (!interactive) return;
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const cxp = rect.left + rect.width / 2;
-    const cyp = rect.top + rect.height / 2;
-    const dx = e.clientX - cxp;
-    const dy = e.clientY - cyp;
-    const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-    const deg = (angle + 360 + 90) % 360;
-    const index = Math.floor(deg / sliceDeg);
-    if (items[index]?.enabled) setHoverIndex(index);
-    else setHoverIndex(null);
-  };
-
-  const onPointerLeave = () => setHoverIndex(null);
-
-  const onPointerUp = (e) => {
-    if (!interactive) return;
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const cxp = rect.left + rect.width / 2;
-    const cyp = rect.top + rect.height / 2;
-    const dx = e.clientX - cxp;
-    const dy = e.clientY - cyp;
-    const r = Math.sqrt(dx * dx + dy * dy);
-    const innerRadius = Math.max(Math.min(rect.width, rect.height) * 0.26, 120);
-    if (r < innerRadius) return;
-    const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-    const deg = (angle + 360 + 90) % 360;
-    const index = Math.floor(deg / sliceDeg);
-    const item = items[index];
-    if (item && item.enabled) onSelect(item.key);
-  };
-
-  const polarToCartesian = (cx, cy, r, deg) => {
-    const rad = ((deg - 90) * Math.PI) / 180;
-    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-  };
-  const arcPath = (cx, cy, rOuter, rInner, startAngle, endAngle) => {
-    const startOuter = polarToCartesian(cx, cy, rOuter, endAngle);
-    const endOuter = polarToCartesian(cx, cy, rOuter, startAngle);
-    const startInner = polarToCartesian(cx, cy, rInner, startAngle);
-    const endInner = polarToCartesian(cx, cy, rInner, endAngle);
-    const largeArc = endAngle - startAngle <= 180 ? 0 : 1;
-    return [
-      `M ${startOuter.x} ${startOuter.y}`,
-      `A ${rOuter} ${rOuter} 0 ${largeArc} 0 ${endOuter.x} ${endOuter.y}`,
-      `L ${startInner.x} ${startInner.y}`,
-      `A ${rInner} ${rInner} 0 ${largeArc} 1 ${endInner.x} ${endInner.y}`,
-      "Z",
-    ].join(" ");
-  };
-
-  return (
-    <div
-      className="optimizer__circle"
-      ref={ref}
-      onMouseMove={onPointerMove}
-      onMouseLeave={onPointerLeave}
-      onMouseUp={onPointerUp}
-      role="menu"
-      aria-label="Choose section"
-    >
-      <svg
-        className="optimizer__circle-svg"
-        width={size || 300}
-        height={size || 300}
-        viewBox={`0 0 ${size || 300} ${size || 300}`}
-        aria-hidden="true"
-      >
-        {items.map((it, i) => {
-          const start = i * sliceDeg;
-          const end = (i + 1) * sliceDeg;
-          const fill = it.enabled
-            ? "rgba(0, 255, 255, 0.08)"
-            : "rgba(180, 180, 180, 0.08)";
-          const d = arcPath(cx, cy, rOuter, rInner, start, end);
-          return (
-            <path
-              key={`slice-${it.key}`}
-              d={d}
-              fill={fill}
-              pointerEvents={interactive && it.enabled ? "auto" : "none"}
-              onMouseEnter={() => it.enabled && interactive && setHoverIndex(i)}
-              onMouseLeave={() => setHoverIndex((hi) => (hi === i ? null : hi))}
-              onClick={() => it.enabled && interactive && onSelect(it.key)}
-              style={{
-                cursor: it.enabled && interactive ? "pointer" : "default",
-              }}
-            />
-          );
-        })}
-        {items.map((_, i) => {
-          const a = i * sliceDeg;
-          const p1 = polarToCartesian(cx, cy, rInner, a);
-          const p2 = polarToCartesian(cx, cy, rOuter, a);
-          return (
-            <line
-              key={`sep-${i}`}
-              x1={p1.x}
-              y1={p1.y}
-              x2={p2.x}
-              y2={p2.y}
-              stroke="rgba(255, 140, 0, 0.9)"
-              strokeWidth={2}
-              strokeLinecap="round"
-              shapeRendering="geometricPrecision"
-              pointerEvents="none"
-            />
-          );
-        })}
-        {hoverIndex != null &&
-          (() => {
-            const start = hoverIndex * sliceDeg;
-            const end = (hoverIndex + 1) * sliceDeg;
-            const d = arcPath(cx, cy, rOuter, rInner, start, end);
-            return (
-              <path d={d} fill="rgba(0,255,255,0.22)" pointerEvents="none" />
-            );
-          })()}
-      </svg>
-      <div className="optimizer__circle-center">
-        <div className="optimizer__circle-center-content">
-          <label className="optimizer__circle-vocation-label">Vocation</label>
-          <select
-            className="optimizer__circle-vocation"
-            value={vocation || ""}
-            onChange={(e) =>
-              onVocationChange && onVocationChange(e.target.value)
-            }
-          >
-            <option value="">Select Vocation</option>
-            <option value="knight">Knight</option>
-            <option value="paladin">Paladin</option>
-            <option value="sorcerer">Sorcerer</option>
-            <option value="druid">Druid</option>
-          </select>
-        </div>
-      </div>
-      <div className="optimizer__circle-labels">
-        {items.map((it, i) => {
-          const angleDeg = i * sliceDeg + sliceDeg / 2;
-          const rad = ((angleDeg - 90) * Math.PI) / 180;
-          const r = size * 0.36;
-          const xPct = 50 + ((r * Math.cos(rad)) / (size || 1)) * 100;
-          const yPct = 50 + ((r * Math.sin(rad)) / (size || 1)) * 100;
-          return (
-            <div
-              key={it.key}
-              className={`optimizer__circle-label${
-                it.enabled ? "" : " optimizer__circle-label--disabled"
-              }${hoverIndex === i ? " optimizer__circle-label--hover" : ""}${
-                it.done ? " optimizer__circle-label--done" : ""
-              }`}
-              style={{ left: `${xPct}%`, top: `${yPct}%` }}
-            >
-              <span className="optimizer__circle-num">{i + 1}</span>
-              <span>{it.label}</span>
-              {it.done ? (
-                <span className="optimizer__circle-done">✓</span>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+import CharacterSection from "./section/character";
+import EncounterSection from "./section/encounter";
+import Summary from "./section/summary";
 
 function Form() {
-  const [main, setMain] = useState({
-    vocation: "",
-    level: "",
-    magic: "",
-  });
-
-  const [secondary, setSecondary] = useState({
-    sword: "",
-    axe: "",
-    club: "",
-    distance: "",
-    shield: "",
-  });
-
-  const [equipment, setEquipment] = useState({
-    helmet: "",
-    armor: "",
-    leg: "",
-    boot: "",
-    amulet: "",
-    ring: "",
-    trinket: "",
-    shield: "",
-    quiver: "",
-    spellbook: "",
-  });
-
-  const [weapon, setWeapon] = useState({
-    weapon: "",
-    ammunition: "",
-  });
-
+  const [main, setMain] = useState({ vocation: "", level: "", magic: "" });
   const [intro, setIntro] = useState(true);
   const [showScroll, setShowScroll] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [activeWindow, setActiveWindow] = useState(null);
-  const [completed, setCompleted] = useState({
+  const [activeLeft, setActiveLeft] = useState(null);
+  const [activeRight, setActiveRight] = useState(null);
+  const [completedLeft, setCompletedLeft] = useState({
     skills: false,
     equipments: false,
     weapons: false,
     abilities: false,
+  });
+  const [completedRight, setCompletedRight] = useState({
     creatures: false,
+    players: false,
   });
 
   const isProd = import.meta.env.PROD;
@@ -278,39 +47,16 @@ function Form() {
   let totalArmor = 0;
   let totalAllResistance = 0;
   let totalSpecificResistance = {};
-  let skillSum = { ...secondary };
+  let skillSum = {};
   let magicLevelBonus = 0;
 
   const addTo = (obj, key, value) => {
     obj[key] = (parseInt(obj[key]) || 0) + (parseInt(value) || 0);
   };
 
-  const selectedEquipments = Object.values(equipment)
-    .map((name) => equipmentsList.find((item) => item.name === name))
-    .filter(Boolean);
-
-  selectedEquipments.forEach((item) => {
-    totalArmor += item.armor || 0;
-    if (item.resistanceAll) totalAllResistance += item.resistanceAll;
-    if (item.resistance) {
-      Object.entries(item.resistance).forEach(([element, value]) => {
-        addTo(totalSpecificResistance, element, value);
-      });
-    }
-    if (item.skills) {
-      Object.entries(item.skills).forEach(([skill, value]) => {
-        addTo(skillSum, skill, value);
-        if (skill === "magicLevel") magicLevelBonus += value;
-      });
-    }
-  });
-
-  const selectedWeaponObj = weaponsList.find(
-    (item) => item.name === weapon.weapon
-  );
-  const selectedAmmoObj = weaponsList.find(
-    (item) => item.name === weapon.ammunition
-  );
+  const selectedEquipments = [];
+  const selectedWeaponObj = undefined;
+  const selectedAmmoObj = undefined;
 
   const avgDamage = (dmg) => {
     if (typeof dmg === "object" && dmg !== null) {
@@ -327,45 +73,14 @@ function Form() {
   let totalAttack = weaponAttack + ammoAttack;
   let totalDamage = weaponDamage + ammoDamage;
 
-  if (selectedWeaponObj) {
-    if (selectedWeaponObj.attack)
-      addTo(skillSum, "attack", selectedWeaponObj.attack);
-    if (selectedWeaponObj.damage)
-      addTo(skillSum, "damage", avgDamage(selectedWeaponObj.damage));
-    if (selectedWeaponObj.resistance) {
-      Object.entries(selectedWeaponObj.resistance).forEach(
-        ([element, value]) => {
-          addTo(totalSpecificResistance, element, value);
-        }
-      );
-    }
-    if (selectedWeaponObj.skills) {
-      Object.entries(selectedWeaponObj.skills).forEach(([skill, value]) => {
-        addTo(skillSum, skill, value);
-        if (skill === "magicLevel") magicLevelBonus += value;
-      });
-    }
-  }
-
-  if (selectedAmmoObj) {
-    if (selectedAmmoObj.attack)
-      addTo(skillSum, "attack", selectedAmmoObj.attack);
-    if (selectedAmmoObj.damage)
-      addTo(skillSum, "damage", avgDamage(selectedAmmoObj.damage));
-    if (selectedAmmoObj.resistance) {
-      Object.entries(selectedAmmoObj.resistance).forEach(([element, value]) => {
-        addTo(totalSpecificResistance, element, value);
-      });
-    }
-    if (selectedAmmoObj.skills) {
-      Object.entries(selectedAmmoObj.skills).forEach(([skill, value]) => {
-        addTo(skillSum, skill, value);
-        if (skill === "magicLevel") magicLevelBonus += value;
-      });
-    }
-  }
-
   const effectiveMagicLevel = (parseInt(main.magic) || 0) + magicLevelBonus;
+
+  const characterDone =
+    completedLeft.skills &&
+    completedLeft.equipments &&
+    completedLeft.weapons &&
+    completedLeft.abilities;
+  const encounterDone = completedRight.creatures && completedRight.players;
 
   return (
     <div className="optimizer__form app-container">
@@ -437,33 +152,15 @@ function Form() {
                 className="optimizer__restart-btn"
                 onClick={() => {
                   setMain({ vocation: "", level: "", magic: "" });
-                  setSecondary({
-                    sword: "",
-                    axe: "",
-                    club: "",
-                    distance: "",
-                    shield: "",
-                  });
-                  setEquipment({
-                    helmet: "",
-                    armor: "",
-                    leg: "",
-                    boot: "",
-                    amulet: "",
-                    ring: "",
-                    trinket: "",
-                    shield: "",
-                    quiver: "",
-                    spellbook: "",
-                  });
-                  setWeapon({ weapon: "", ammunition: "" });
-                  setCompleted({
+                  setActiveLeft(null);
+                  setActiveRight(null);
+                  setCompletedLeft({
                     skills: false,
                     equipments: false,
                     weapons: false,
                     abilities: false,
-                    creatures: false,
                   });
+                  setCompletedRight({ creatures: false, players: false });
                 }}
                 type="button"
                 aria-label="Restart"
@@ -473,245 +170,37 @@ function Form() {
             </div>
             <div className="optimizer__overlay-body">
               <div className="optimizer__overlay-left">
-                <CircleMenu
-                  items={[
-                    {
-                      key: "skills",
-                      label: "SKILLS",
-                      enabled: !!main.vocation,
-                      done: completed.skills,
-                    },
-                    {
-                      key: "equipments",
-                      label: "EQUIP",
-                      enabled: !!main.vocation && completed.skills,
-                      done: completed.equipments,
-                    },
-                    {
-                      key: "weapons",
-                      label: "WEAPONS",
-                      enabled:
-                        !!main.vocation &&
-                        completed.skills &&
-                        completed.equipments,
-                      done: completed.weapons,
-                    },
-                    {
-                      key: "abilities",
-                      label: "ABILITIES",
-                      enabled:
-                        !!main.vocation &&
-                        completed.skills &&
-                        completed.equipments &&
-                        completed.weapons,
-                      done: completed.abilities,
-                    },
-                    {
-                      key: "creatures",
-                      label: "CREATURES",
-                      enabled:
-                        !!main.vocation &&
-                        completed.skills &&
-                        completed.equipments &&
-                        completed.weapons &&
-                        completed.abilities,
-                      done: completed.creatures,
-                    },
-                  ]}
-                  onSelect={(key) => {
-                    setActiveWindow(key);
-                  }}
-                  onClose={() => setShowMenu(false)}
-                  vocation={main.vocation}
-                  onVocationChange={(v) =>
-                    setMain((m) => ({ ...m, vocation: v }))
-                  }
-                  interactive={!activeWindow}
+                <CharacterSection
+                  main={main}
+                  setMain={setMain}
+                  activeLeft={activeLeft}
+                  setActiveLeft={setActiveLeft}
+                  completedLeft={completedLeft}
+                  setCompletedLeft={setCompletedLeft}
+                />
+              </div>
+              <div className="optimizer__overlay-center">
+                <Summary
+                  characterDone={characterDone}
+                  encounterDone={encounterDone}
                 />
               </div>
               <div className="optimizer__overlay-right">
-                {completed.skills &&
-                  completed.equipments &&
-                  completed.weapons &&
-                  completed.abilities &&
-                  completed.creatures && (
-                    <div className="optimizer__equipment-summary">
-                      <h3>Character Summary</h3>
-                      <div className="optimizer__equipment-grid">
-                        <p>
-                          <strong>Vocation:</strong>{" "}
-                          {forceCasing(main.vocation) || "None"}
-                        </p>
-                        <p>
-                          <strong>Level:</strong> {main.level || "None"}
-                        </p>
-                        <p>
-                          <strong>Magic Level:</strong> {main.magic || "None"}
-                        </p>
-                        <p>
-                          <strong>Effective Magic Level:</strong>{" "}
-                          {effectiveMagicLevel}
-                        </p>
-                        <p>
-                          <strong>Weapon:</strong> {weapon.weapon || "None"}
-                        </p>
-                        <p>
-                          <strong>Ammunition:</strong>{" "}
-                          {weapon.ammunition || "None"}
-                        </p>
-                        <p>
-                          <strong>Helmet:</strong> {equipment.helmet || "None"}
-                        </p>
-                        <p>
-                          <strong>Armor:</strong> {equipment.armor || "None"}
-                        </p>
-                        <p>
-                          <strong>Legs:</strong> {equipment.leg || "None"}
-                        </p>
-                        <p>
-                          <strong>Boots:</strong> {equipment.boot || "None"}
-                        </p>
-                        <p>
-                          <strong>Amulet:</strong> {equipment.amulet || "None"}
-                        </p>
-                        <p>
-                          <strong>Ring:</strong> {equipment.ring || "None"}
-                        </p>
-                        <p>
-                          <strong>Trinket:</strong>{" "}
-                          {equipment.trinket || "None"}
-                        </p>
-                        {(() => {
-                          const OFFHAND_SLOTS_BY_VOCATION = {
-                            knight: ["shield"],
-                            paladin: ["quiver", "shield"],
-                            sorcerer: ["spellbook"],
-                            druid: ["spellbook"],
-                          };
-                          const voc = main.vocation || "";
-                          const offhandSlots =
-                            OFFHAND_SLOTS_BY_VOCATION[voc] || [];
-                          return offhandSlots.map((slot) => (
-                            <p key={slot}>
-                              <strong>{forceCasing(slot)}:</strong>{" "}
-                              {equipment[slot] || "None"}
-                            </p>
-                          ));
-                        })()}
-                      </div>
-                      <br />
-                      <ul>
-                        <li>
-                          <strong>Total Armor:</strong> {totalArmor}
-                        </li>
-                        <li>
-                          <strong>Total All Resistance:</strong>{" "}
-                          {totalAllResistance}%
-                        </li>
-                        <li>
-                          <strong>Total Element Specific Resistance:</strong>
-                          <ul>
-                            {Object.entries(totalSpecificResistance).map(
-                              ([element, value]) => (
-                                <li key={element}>
-                                  {forceCasing(element)}: {value}%
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </li>
-                        <li>
-                          <strong>Total Skills:</strong>
-                          <ul>
-                            {Object.entries(skillSum)
-                              .filter(
-                                ([skill]) =>
-                                  skill !== "attack" && skill !== "damage"
-                              )
-                              .map(([skill, value]) => (
-                                <li key={skill}>
-                                  {forceCasing(skill)}: {value}
-                                </li>
-                              ))}
-                          </ul>
-                        </li>
-                        <li>
-                          <strong>Total Attack:</strong> {totalAttack}
-                        </li>
-                        <li>
-                          <strong>Total Damage:</strong> {totalDamage}
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                <EncounterSection
+                  main={main}
+                  activeRight={activeRight}
+                  setActiveRight={setActiveRight}
+                  completedRight={completedRight}
+                  setCompletedRight={setCompletedRight}
+                  enabled={characterDone}
+                />
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {activeWindow && (
-        <div className="optimizer__window">
-          <div className="optimizer__window-header">
-            <h3 style={{ margin: 0 }}>{activeWindow.toUpperCase()}</h3>
-            <div>
-              <button
-                className="optimizer__restart-btn"
-                onClick={() => setActiveWindow(null)}
-                type="button"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-          {activeWindow === "skills" && (
-            <Skills
-              main={main}
-              setMain={setMain}
-              secondary={secondary}
-              setSecondary={setSecondary}
-            />
-          )}
-          {activeWindow === "equipments" && (
-            <Equipments
-              vocation={main.vocation}
-              equipment={equipment}
-              setEquipment={setEquipment}
-            />
-          )}
-          {activeWindow === "weapons" && (
-            <Weapons
-              vocation={main.vocation}
-              weapon={weapon}
-              setWeapon={setWeapon}
-            />
-          )}
-          {activeWindow === "abilities" && (
-            <Abilities
-              character={{
-                ...main,
-                magic: effectiveMagicLevel,
-              }}
-            />
-          )}
-          {activeWindow === "creatures" && (
-            <Creatures vocation={main.vocation} />
-          )}
-          <div className="optimizer__window-footer">
-            <button
-              className="optimizer__restart-btn"
-              type="button"
-              onClick={() => {
-                if (activeWindow)
-                  setCompleted((c) => ({ ...c, [activeWindow]: true }));
-                setActiveWindow(null);
-              }}
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
+      {}
     </div>
   );
 }

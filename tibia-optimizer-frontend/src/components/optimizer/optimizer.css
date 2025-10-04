@@ -205,7 +205,6 @@
 }
 
 @keyframes lightning-smoke {
-
   0%,
   100% {
     opacity: 0;
@@ -623,9 +622,11 @@ input[type="number"].optimizer__skill-input {
   width: 230px;
   height: 230px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%,
-      rgba(255, 255, 255, 0.06),
-      rgba(0, 0, 0, 0.35));
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.35)
+  );
   border: 2px solid rgba(255, 140, 0, 0.9);
   display: flex;
   align-items: center;
@@ -674,9 +675,11 @@ input[type="number"].optimizer__skill-input {
 .optimizer__circle-highlight {
   position: absolute;
   inset: 0;
-  background: conic-gradient(rgba(0, 255, 255, 0.2) 0deg,
-      rgba(0, 255, 255, 0.2) 60deg,
-      transparent 60deg 360deg);
+  background: conic-gradient(
+    rgba(0, 255, 255, 0.2) 0deg,
+    rgba(0, 255, 255, 0.2) 60deg,
+    transparent 60deg 360deg
+  );
   pointer-events: none;
   mix-blend-mode: screen;
 }
@@ -879,6 +882,13 @@ input[type="number"].optimizer__skill-input {
   justify-content: center;
 }
 
+.optimizer__overlay-center {
+  flex: 0 0 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .optimizer__overlay-right {
   flex: 0 1 520px;
   max-width: 520px;
@@ -926,4 +936,17 @@ input[type="number"].optimizer__skill-input {
 .optimizer__equipment-summary li,
 .optimizer__equipment-summary h3 {
   color: #fff;
+}
+
+.optimizer__summary {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+.optimizer__summary-title {
+  margin: 0 0 0.75rem;
+  text-align: center;
 }

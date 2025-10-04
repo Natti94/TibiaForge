@@ -56,6 +56,10 @@ tibia-optimizer-frontend/
 				optimizer.jsx
 				form/
 					form.jsx
+					section/
+						character.jsx
+						encounter.jsx
+						summary.jsx
 					form-wrapper/
 						character/
 							abilities.jsx
@@ -112,12 +116,14 @@ Notes:
 
 ## Features
 
-- Optimizer UI with a CSGO-style radial menu
-  - Click BEGIN to open an overlay with a circular menu
-  - Center hub selects vocation; slices unlock in order: Skills → Equip → Weapons → Abilities → Creatures
-  - Each completed slice shows a ✓ indicator; only one section window is open at a time
-  - SVG-based wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center
-  - Character Summary appears on the right once all slices are completed (armor, resistances, skills, attack/damage, effective ML)
+- Optimizer UI with a CSGO-style radial menu (now two circles with a center summary)
+  - Click BEGIN to open an overlay composed of three columns:
+    - Left: Character circle (Skills → Equip → Weapons → Abilities). The center hub selects vocation.
+    - Center: Summary panel that guides you to complete both circles; shows status messaging.
+    - Right: Encounter circle (Creatures → Players), gated until the character circle is complete.
+  - Each completed slice shows a ✓ indicator; only one section window is open at a time.
+  - SVG-based wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center.
+  - Abort and Restart controls appear in the overlay header; BEGIN remains visible in the title area.
 - Encounter helpers (Creatures; Players stubbed)
 - Media area: News, Video, Images, and Highscores Statistics
   - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
