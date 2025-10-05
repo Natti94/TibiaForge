@@ -6,7 +6,7 @@ export async function registerUser(
   password,
   email,
   avatar,
-  csrfToken,
+  csrfToken
 ) {
   if (!csrfToken) {
     csrfToken = await generateCsrf();
@@ -26,7 +26,7 @@ export async function registerUser(
   if (res.ok) {
     const data = await handleSuccess(
       res,
-      "Registration successful, redirecting to login...",
+      "Registration successful, redirecting to login..."
     );
 
     if (data?.registerUser?.avatar) {
@@ -37,6 +37,6 @@ export async function registerUser(
   }
   await handleError(
     res,
-    "Registration failed. The username or email may already be in use, or the input is invalid.",
+    "Registration failed. The username or email may already be in use, or the input is invalid."
   );
 }

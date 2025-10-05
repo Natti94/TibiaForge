@@ -20,7 +20,7 @@ function CircleMenuCharacter({
   const rOuter = useMemo(() => (size > 0 ? size / 2 - 4 : 150), [size]);
   const rInner = useMemo(
     () => (size > 0 ? Math.max(size * 0.25, 120) : 120),
-    [size],
+    [size]
   );
   const cx = useMemo(() => (size > 0 ? size / 2 : 150), [size]);
   const cy = cx;
@@ -139,10 +139,10 @@ function CircleMenuCharacter({
               y1={p1.y}
               x2={p2.x}
               y2={p2.y}
-              stroke="rgba(255, 140, 0, 0.9)"
+              stroke="#ff8c00"
               strokeWidth={2}
               strokeLinecap="round"
-              shapeRendering="geometricPrecision"
+              vectorEffect="non-scaling-stroke"
               pointerEvents="none"
             />
           );
@@ -159,7 +159,7 @@ function CircleMenuCharacter({
       </svg>
       <div className="optimizer__circle-center">
         <div className="optimizer__circle-center-content">
-          <label className="optimizer__circle-vocation-label">Vocation</label>
+          <div className="optimizer__circle-center-title">Character</div>
           <select
             className="optimizer__circle-vocation"
             value={vocation || ""}
@@ -212,28 +212,13 @@ export default function CharacterSection({
   setActiveLeft,
   completedLeft,
   setCompletedLeft,
+  secondary,
+  setSecondary,
+  equipment,
+  setEquipment,
+  weapon,
+  setWeapon,
 }) {
-  const [secondary, setSecondary] = useState({
-    sword: "",
-    axe: "",
-    club: "",
-    distance: "",
-    shield: "",
-  });
-  const [equipment, setEquipment] = useState({
-    helmet: "",
-    armor: "",
-    leg: "",
-    boot: "",
-    amulet: "",
-    ring: "",
-    trinket: "",
-    shield: "",
-    quiver: "",
-    spellbook: "",
-  });
-  const [weapon, setWeapon] = useState({ weapon: "", ammunition: "" });
-
   const leftItems = [
     {
       key: "skills",

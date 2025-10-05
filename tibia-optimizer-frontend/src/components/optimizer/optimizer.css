@@ -156,6 +156,7 @@
 .optimizer__form {
   position: relative;
   width: 100%;
+  margin-top: 2rem;
 }
 
 .optimizer__content-wrapper {
@@ -164,6 +165,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem 2rem;
+  padding-bottom: 1rem;
   border-radius: 18px;
   outline: 6px groove aqua;
   background-color: rgba(0, 0, 0, 0.6);
@@ -171,7 +173,6 @@
   max-height: none;
   overflow: visible;
   box-sizing: border-box;
-  margin: 1rem 0;
 }
 
 .optimizer__title-wrapper {
@@ -474,7 +475,7 @@ input[type="number"].optimizer__skill-input {
     0 0 0 6px rgba(0, 255, 255, 0.18) inset;
 }
 
-.optimizer__restart-btn {
+.optimizer__restart-abort-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -500,8 +501,8 @@ input[type="number"].optimizer__skill-input {
   margin: 0 auto 1.5rem auto;
 }
 
-.optimizer__restart-btn:hover,
-.optimizer__restart-btn:focus {
+.optimizer__restart-abort-btn:hover,
+.optimizer__restart-abort-btn:focus {
   background: linear-gradient(90deg, #0ff 0%, #0a2233 100%);
   color: #0ff;
   border-color: #fff;
@@ -622,15 +623,20 @@ input[type="number"].optimizer__skill-input {
   width: 230px;
   height: 230px;
   border-radius: 50%;
+  color: white;
   background: radial-gradient(
     circle at 50% 50%,
     rgba(255, 255, 255, 0.06),
     rgba(0, 0, 0, 0.35)
   );
-  border: 2px solid rgba(255, 140, 0, 0.9);
+  box-shadow:
+    0 0 30px rgba(0, 255, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(0, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: monospace;
 }
 
 .optimizer__circle-close {
@@ -819,16 +825,40 @@ input[type="number"].optimizer__skill-input {
 }
 
 .optimizer__circle-center-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
-.optimizer__circle-vocation {
+.optimizer__circle-center-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-family: monospace;
-  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.optimizer__circle-vocation {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  font-family: monospace;
   padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1.5px solid #0ff;
-  background: rgba(0, 255, 255, 0.08);
+  margin-bottom: 4rem;
+  text-align: center;
+  border-radius: 20px;
+  max-width: 90%;
+  background: transparent;
+  color: #fff;
+}
+
+.optimizer__circle-vocation option {
+  background: #181818;
   color: #fff;
 }
 
@@ -871,15 +901,16 @@ input[type="number"].optimizer__skill-input {
 .optimizer__overlay-body {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 24px;
 }
 
 .optimizer__overlay-left {
   position: relative;
-  flex: 0 0 640px;
+  flex: 1 1 0;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .optimizer__overlay-center {
@@ -890,8 +921,19 @@ input[type="number"].optimizer__skill-input {
 }
 
 .optimizer__overlay-right {
-  flex: 0 1 520px;
-  max-width: 520px;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optimizer__overlay-actions {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .optimizer__circle-label--done {
@@ -921,14 +963,6 @@ input[type="number"].optimizer__skill-input {
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 0.75rem;
-}
-
-.optimizer__circle-vocation-label {
-  display: block;
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
-  text-align: center;
-  color: #fff;
 }
 
 .optimizer__equipment-summary,

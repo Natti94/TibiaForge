@@ -20,7 +20,7 @@ export async function loginUser(username, password) {
   if (res.ok) {
     const data = await handleSuccess(
       res,
-      "Login successful, redirecting to chat...",
+      "Login successful, redirecting to chat..."
     );
     if (data?.token) {
       sessionStorage.setItem("jwtToken", data.token);
@@ -50,6 +50,6 @@ export async function loginUser(username, password) {
 
   await handleError(
     res,
-    "Login failed. Please check your username and password.",
+    "Login failed. Please check your username and password."
   );
 }

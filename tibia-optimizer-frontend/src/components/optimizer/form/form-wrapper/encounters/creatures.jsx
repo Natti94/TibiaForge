@@ -1,11 +1,17 @@
-import { useState, useEffect } from "react";
-import { fetchCreatures } from "../../../../..";
+import { useState, useEffect, useMemo } from "react";
+import {
+  fetchCreaturesDB,
+  fetchCreaturesWikia,
+} from "../../../../../services/optimizer/creatures";
 
 function Creatures({ vocation }) {
-  const [creature, setCreature] = useState(null);
+  const [DBCreature, setDBCreature] = useState(null);
+  const [wikiaCreature, setWikiaCreature] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loadingDB, setLoadingDB] = useState(false);
+  const [loadingWikia, setLoadingWikia] = useState(false);
+  const [errorDB, setErrorDB] = useState(null);
+  const [errorWikia, setErrorWikia] = useState(null);
 
   const forceCasing = (str) =>
     str
@@ -13,31 +19,74 @@ function Creatures({ vocation }) {
       : "";
 
   useEffect(() => {
-    async function loadCreature() {
+    async function loadCreatureDB() {
       if (!searchTerm) {
-        setCreature(null);
-        setError(null);
+        setDBCreature(null);
+        setErrorDB(null);
         return;
       }
-      setLoading(true);
-      setError(null);
+      setLoadingDB(true);
+      setErrorDB(null);
       try {
-        const data = await fetchCreatures(searchTerm);
-        setCreature(data);
+        const data = await fetchCreaturesDB(searchTerm);
+        setDBCreature(data);
       } catch (err) {
-        setCreature(null);
-        setError(err.message);
+        setDBCreature(null);
+        setErrorDB(err.message);
       } finally {
-        setLoading(false);
+        setLoadingDB(false);
       }
     }
     if (vocation) {
-      loadCreature();
+      loadCreatureDB();
     } else {
-      setCreature(null);
-      setError(null);
+      setDBCreature(null);
+      setErrorDB(null);
     }
   }, [searchTerm, vocation]);
+
+  useEffect(() => {
+    async function loadCreatureWikia() {
+      if (!searchTerm) {
+        setWikiaCreature(null);
+        setErrorWikia(null);
+        return;
+      }
+      setLoadingWikia(true);
+      setErrorWikia(null);
+      try {
+        const wikiaData = await fetchCreaturesWikia(searchTerm);
+        setWikiaCreature(wikiaData);
+      } catch (err) {
+        setWikiaCreature(null);
+        setErrorWikia(err.message);
+      } finally {
+        setLoadingWikia(false);
+      }
+    }
+    if (vocation) {
+      loadCreatureWikia();
+    } else {
+      setWikiaCreature(null);
+      setErrorWikia(null);
+    }
+  }, [searchTerm, vocation]);
+
+  const creature = useMemo(() => {
+    if (!DBCreature && !wikiaCreature) return null;
+    if (DBCreature) {
+      return {
+        ...DBCreature,
+        mods: wikiaCreature?.mods,
+      };
+    }
+    return {
+      mods: wikiaCreature?.mods,
+    };
+  }, [DBCreature, wikiaCreature, searchTerm]);
+
+  const loading = loadingDB || loadingWikia;
+  const error = errorDB && errorWikia ? `${errorDB} | ${errorWikia}` : null;
 
   return (
     <>
@@ -47,7 +96,7 @@ function Creatures({ vocation }) {
         </div>
       )}
       <div
-        className={`optimizer__vocation-content$${
+        className={`optimizer__vocation-content${
           vocation ? " optimizer__vocation-content--show" : ""
         }`}
       >
@@ -101,12 +150,14 @@ function Creatures({ vocation }) {
                       {creature.strong.join(", ") || "None"}
                     </p>
                   )}
-                  {creature.weakness && (
-                    <p className="optimizer__creature-property">
-                      <strong>Weak:</strong>{" "}
-                      {creature.weakness.join(", ") || "None"}
-                    </p>
-                  )}
+                  <p className="optimizer__creature-property">
+                    <strong>Mods:</strong>{" "}
+                    {creature.mods && Object.keys(creature.mods).length > 0
+                      ? Object.entries(creature.mods)
+                          .map(([key, value]) => `${key}: ${value}`)
+                          .join(", ")
+                      : "None"}
+                  </p>
                 </div>
               </div>
             )}

@@ -148,6 +148,11 @@ function CircleMenuEncounter({ items, onSelect, interactive = true }) {
             );
           })()}
       </svg>
+      <div className="optimizer__circle-center">
+        <div className="optimizer__circle-center-content">
+          <div className="optimizer__circle-center-title">Encounter</div>
+        </div>
+      </div>
       <div className="optimizer__circle-labels">
         {items.map((it, i) => {
           const angleDeg = i * sliceDeg + sliceDeg / 2;
@@ -155,6 +160,7 @@ function CircleMenuEncounter({ items, onSelect, interactive = true }) {
           const r = size * 0.36;
           const xPct = 50 + ((r * Math.cos(rad)) / (size || 1)) * 100;
           const yPct = 50 + ((r * Math.sin(rad)) / (size || 1)) * 100;
+
           return (
             <div
               key={it.key}

@@ -19,9 +19,9 @@ const scriptDir = path.dirname(__filename);
 const repoRoot = path.resolve(scriptDir, "..", "..");
 
 const globs = [
-  "**/components/**/*.{js,jsx,css,html}",
-  "**/data/**/*.{js,jsx,css,html}",
-  "**/services/**/*.{js,jsx,css,html}",
+  "***/components/**/*.{js,jsx,css,html}",
+  "***/data/**/*.{js,jsx,css,html}",
+  "***/services/**/*.{js,jsx,css,html}",
 ];
 
 const ignore = [

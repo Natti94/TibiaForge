@@ -22,6 +22,26 @@ function Form() {
     creatures: false,
     players: false,
   });
+  const [secondary, setSecondary] = useState({
+    sword: "",
+    axe: "",
+    club: "",
+    distance: "",
+    shield: "",
+  });
+  const [equipment, setEquipment] = useState({
+    helmet: "",
+    armor: "",
+    leg: "",
+    boot: "",
+    amulet: "",
+    ring: "",
+    trinket: "",
+    shield: "",
+    quiver: "",
+    spellbook: "",
+  });
+  const [weapon, setWeapon] = useState({ weapon: "", ammunition: "" });
 
   const isProd = import.meta.env.PROD;
 
@@ -47,16 +67,39 @@ function Form() {
   let totalArmor = 0;
   let totalAllResistance = 0;
   let totalSpecificResistance = {};
-  let skillSum = {};
+  let skillSum = { ...secondary };
   let magicLevelBonus = 0;
 
   const addTo = (obj, key, value) => {
     obj[key] = (parseInt(obj[key]) || 0) + (parseInt(value) || 0);
   };
 
-  const selectedEquipments = [];
-  const selectedWeaponObj = undefined;
-  const selectedAmmoObj = undefined;
+  const selectedEquipments = Object.values(equipment)
+    .map((name) => equipmentsList.find((item) => item.name === name))
+    .filter(Boolean);
+
+  selectedEquipments.forEach((item) => {
+    totalArmor += item.armor || 0;
+    if (item.resistanceAll) totalAllResistance += item.resistanceAll;
+    if (item.resistance) {
+      Object.entries(item.resistance).forEach(([element, value]) => {
+        addTo(totalSpecificResistance, element, value);
+      });
+    }
+    if (item.skills) {
+      Object.entries(item.skills).forEach(([skill, value]) => {
+        addTo(skillSum, skill, value);
+        if (skill === "magicLevel") magicLevelBonus += value;
+      });
+    }
+  });
+
+  const selectedWeaponObj = weaponsList.find(
+    (item) => item.name === weapon.weapon,
+  );
+  const selectedAmmoObj = weaponsList.find(
+    (item) => item.name === weapon.ammunition,
+  );
 
   const avgDamage = (dmg) => {
     if (typeof dmg === "object" && dmg !== null) {
@@ -73,6 +116,44 @@ function Form() {
   let totalAttack = weaponAttack + ammoAttack;
   let totalDamage = weaponDamage + ammoDamage;
 
+  if (selectedWeaponObj) {
+    if (selectedWeaponObj.attack)
+      addTo(skillSum, "attack", selectedWeaponObj.attack);
+    if (selectedWeaponObj.damage)
+      addTo(skillSum, "damage", avgDamage(selectedWeaponObj.damage));
+    if (selectedWeaponObj.resistance) {
+      Object.entries(selectedWeaponObj.resistance).forEach(
+        ([element, value]) => {
+          addTo(totalSpecificResistance, element, value);
+        },
+      );
+    }
+    if (selectedWeaponObj.skills) {
+      Object.entries(selectedWeaponObj.skills).forEach(([skill, value]) => {
+        addTo(skillSum, skill, value);
+        if (skill === "magicLevel") magicLevelBonus += value;
+      });
+    }
+  }
+
+  if (selectedAmmoObj) {
+    if (selectedAmmoObj.attack)
+      addTo(skillSum, "attack", selectedAmmoObj.attack);
+    if (selectedAmmoObj.damage)
+      addTo(skillSum, "damage", avgDamage(selectedAmmoObj.damage));
+    if (selectedAmmoObj.resistance) {
+      Object.entries(selectedAmmoObj.resistance).forEach(([element, value]) => {
+        addTo(totalSpecificResistance, element, value);
+      });
+    }
+    if (selectedAmmoObj.skills) {
+      Object.entries(selectedAmmoObj.skills).forEach(([skill, value]) => {
+        addTo(skillSum, skill, value);
+        if (skill === "magicLevel") magicLevelBonus += value;
+      });
+    }
+  }
+
   const effectiveMagicLevel = (parseInt(main.magic) || 0) + magicLevelBonus;
 
   const characterDone =
@@ -81,6 +162,27 @@ function Form() {
     completedLeft.weapons &&
     completedLeft.abilities;
   const encounterDone = completedRight.creatures && completedRight.players;
+
+  const summaryData = {
+    vocation: main.vocation,
+    level: main.level,
+    magicLevel: main.magic,
+    effectiveMagicLevel,
+    equipment,
+    weapon,
+    totals: {
+      armor: totalArmor,
+      resistanceAll: totalAllResistance,
+      resistanceByElement: totalSpecificResistance,
+      skills: Object.fromEntries(
+        Object.entries(skillSum).filter(
+          ([k]) => k !== "attack" && k !== "damage",
+        ),
+      ),
+      attack: totalAttack,
+      damage: totalDamage,
+    },
+  };
 
   return (
     <div className="optimizer__form app-container">
@@ -139,34 +241,38 @@ function Form() {
             className="optimizer__overlay-container"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="optimizer__overlay-header">
-              <button
-                className="optimizer__restart-btn"
-                onClick={() => setShowMenu(false)}
-                type="button"
-                aria-label="Abort"
-              >
-                ✖ Abort
-              </button>
-              <button
-                className="optimizer__restart-btn"
-                onClick={() => {
-                  setMain({ vocation: "", level: "", magic: "" });
-                  setActiveLeft(null);
-                  setActiveRight(null);
-                  setCompletedLeft({
-                    skills: false,
-                    equipments: false,
-                    weapons: false,
-                    abilities: false,
-                  });
-                  setCompletedRight({ creatures: false, players: false });
-                }}
-                type="button"
-                aria-label="Restart"
-              >
-                ⟳ Restart
-              </button>
+            <div className="optimizer__overlay-header">{}</div>
+            <div className="optimizer__overlay-controls">
+              <div className="optimizer__overlay-top-right">
+                <button
+                  className="optimizer__restart-abort-btn"
+                  onClick={() => setShowMenu(false)}
+                  type="button"
+                  aria-label="Abort"
+                >
+                  ✖ Abort
+                </button>
+                <button
+                  className="optimizer__restart-abort-btn"
+                  onClick={() => {
+                    setMain({ vocation: "", level: "", magic: "" });
+                    setActiveLeft(null);
+                    setActiveRight(null);
+                    setCompletedLeft({
+                      skills: false,
+                      equipments: false,
+                      weapons: false,
+                      abilities: false,
+                    });
+                    setCompletedRight({ creatures: false, players: false });
+                  }}
+                  type="button"
+                  aria-label="Restart"
+                  style={{ marginLeft: 8 }}
+                >
+                  ⟳ Restart
+                </button>
+              </div>
             </div>
             <div className="optimizer__overlay-body">
               <div className="optimizer__overlay-left">
@@ -177,12 +283,19 @@ function Form() {
                   setActiveLeft={setActiveLeft}
                   completedLeft={completedLeft}
                   setCompletedLeft={setCompletedLeft}
+                  secondary={secondary}
+                  setSecondary={setSecondary}
+                  equipment={equipment}
+                  setEquipment={setEquipment}
+                  weapon={weapon}
+                  setWeapon={setWeapon}
                 />
               </div>
               <div className="optimizer__overlay-center">
                 <Summary
                   characterDone={characterDone}
                   encounterDone={encounterDone}
+                  summaryData={summaryData}
                 />
               </div>
               <div className="optimizer__overlay-right">

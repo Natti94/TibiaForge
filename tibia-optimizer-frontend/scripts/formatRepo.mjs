@@ -33,7 +33,6 @@ const ignore = [
 
 async function formatFile(file) {
   const content = await fs.readFile(file, "utf8");
-  // Let Prettier infer the parser from the file path; merge with any resolved config.
   const config = (await prettier.resolveConfig(file)) ?? {};
   const formatted = await prettier.format(content, {
     ...config,
