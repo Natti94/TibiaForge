@@ -691,10 +691,10 @@ input[type="number"].optimizer__skill-input {
 }
 
 .optimizer__circle-num {
-  display: inline-block;
+  display: grid;
   font-size: 0.8rem;
   opacity: 0.8;
-  margin-right: 0.25rem;
+  margin-left: 40%;
 }
 
 .optimizer__window {
@@ -944,8 +944,8 @@ input[type="number"].optimizer__skill-input {
 }
 
 .optimizer__circle-done {
-  display: inline-block;
-  margin-left: 0.35rem;
+  display: grid;
+  margin-left: 40%;
   color: #00ff9d;
   font-weight: bold;
   text-shadow: 0 0 6px rgba(0, 255, 157, 0.6);

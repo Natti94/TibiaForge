@@ -77,7 +77,10 @@ function Creatures({ vocation }) {
     if (DBCreature) {
       return {
         ...DBCreature,
+        mitigation: wikiaCreature?.mitigation,
+        armor: wikiaCreature?.armor,
         mods: wikiaCreature?.mods,
+        abilities: wikiaCreature?.abilities,
       };
     }
     return {
@@ -138,25 +141,29 @@ function Creatures({ vocation }) {
                     <strong>Hitpoints:</strong>{" "}
                     {creature.hitpoints || "Unknown"}
                   </p>
-                  {creature.immune && (
-                    <p className="optimizer__creature-property">
-                      <strong>Immune:</strong>{" "}
-                      {creature.immune.join(", ") || "None"}
-                    </p>
-                  )}
-                  {creature.strong && (
-                    <p className="optimizer__creature-property">
-                      <strong>Strong:</strong>{" "}
-                      {creature.strong.join(", ") || "None"}
-                    </p>
-                  )}
+                  <p className="optimizer__creature-property">
+                    <strong>Armor:</strong> {creature.armor || "Unknown"}
+                  </p>
+                  <p className="optimizer__creature-property">
+                    <strong>Mitigation:</strong>{" "}
+                    {creature.mitigation || "Unknown"}
+                  </p>
                   <p className="optimizer__creature-property">
                     <strong>Mods:</strong>{" "}
                     {creature.mods && Object.keys(creature.mods).length > 0
                       ? Object.entries(creature.mods)
                           .map(([key, value]) => `${key}: ${value}`)
                           .join(", ")
-                      : "None"}
+                      : "Unknown"}
+                  </p>
+                  <p className="optimizer__creature-property">
+                    <strong>Abilities:</strong>{" "}
+                    {creature.abilities &&
+                    Object.keys(creature.abilities).length > 0
+                      ? Object.entries(creature.abilities)
+                          .map(([key, value]) => `${key}: ${value}`)
+                          .join(", ")
+                      : "Unknown"}
                   </p>
                 </div>
               </div>

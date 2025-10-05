@@ -20,7 +20,7 @@ function CircleMenuCharacter({
   const rOuter = useMemo(() => (size > 0 ? size / 2 - 4 : 150), [size]);
   const rInner = useMemo(
     () => (size > 0 ? Math.max(size * 0.25, 120) : 120),
-    [size]
+    [size],
   );
   const cx = useMemo(() => (size > 0 ? size / 2 : 150), [size]);
   const cy = cx;

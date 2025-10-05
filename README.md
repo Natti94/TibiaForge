@@ -116,15 +116,18 @@ Notes:
 
 ## Features
 
-- Optimizer UI with a CSGO-style radial menu (now two circles with a center summary)
-  - Click BEGIN to open an overlay composed of three columns:
-    - Left: Character circle (Skills → Equip → Weapons → Abilities). The center hub selects vocation.
-    - Center: Summary panel that guides you to complete both circles; shows status messaging.
-    - Right: Encounter circle (Creatures → Players), gated until the character circle is complete.
+- Modern optimizer UI with two SVG circles (Character and Encounter) and a center summary
+  - Both circles use a unified aqua/cyan color theme for visual consistency
+  - Click BEGIN to open an overlay with three columns:
+    - Left: Character circle (Skills → Equip → Weapons → Abilities). Center hub for vocation selection.
+    - Center: Summary panel guides completion and shows status messaging.
+    - Right: Encounter circle (Creatures → Players), gated until character is complete.
   - Each completed slice shows a ✓ indicator; only one section window is open at a time.
-  - SVG-based wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center.
+  - SVG wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center.
   - Abort and Restart controls appear in the overlay header; BEGIN remains visible in the title area.
-- Encounter helpers (Creatures; Players stubbed)
+- Encounter helpers:
+  - Creatures: Fetches and merges static/elemental data from both DB and Wikia APIs; displays all static properties and elemental mods.
+  - Players: UI stubbed for future expansion.
 - Media area: News, Video, Images, and Highscores Statistics
   - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
 - Navigation with info pages (About, Contact, Cooperations, Donate, Guides)

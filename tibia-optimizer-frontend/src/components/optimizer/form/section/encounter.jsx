@@ -101,7 +101,7 @@ function CircleMenuEncounter({ items, onSelect, interactive = true }) {
           const start = i * sliceDeg;
           const end = (i + 1) * sliceDeg;
           const fill = it.enabled
-            ? "rgba(255, 215, 0, 0.08)"
+            ? "rgba(0, 255, 255, 0.08)"
             : "rgba(180, 180, 180, 0.08)";
           const d = arcPath(cx, cy, rOuter, rInner, start, end);
           return (
@@ -130,10 +130,10 @@ function CircleMenuEncounter({ items, onSelect, interactive = true }) {
               y1={p1.y}
               x2={p2.x}
               y2={p2.y}
-              stroke="rgba(255, 140, 0, 0.9)"
+              stroke="#ff8c00"
               strokeWidth={2}
               strokeLinecap="round"
-              shapeRendering="geometricPrecision"
+              vectorEffect="non-scaling-stroke"
               pointerEvents="none"
             />
           );
@@ -144,7 +144,7 @@ function CircleMenuEncounter({ items, onSelect, interactive = true }) {
             const end = (hoverIndex + 1) * sliceDeg;
             const d = arcPath(cx, cy, rOuter, rInner, start, end);
             return (
-              <path d={d} fill="rgba(255,215,0,0.22)" pointerEvents="none" />
+              <path d={d} fill="rgba(0,255,255,0.22)" pointerEvents="none" />
             );
           })()}
       </svg>

@@ -23,9 +23,11 @@ export async function fetchCreaturesWikia(name = "") {
   if (!res.ok) throw new Error("Failed to fetch creature");
 
   const data = await res.json();
-  if (!data || typeof data !== "object") throw new Error("No creature found");
+  if (!data && typeof data !== "object") throw new Error("No creature found");
 
   return {
+    mitigation: data.mitigation,
+    armor: data.armor,
     mods: {
       ice: data.iceDmgMod,
       fire: data.fireDmgMod,
@@ -35,5 +37,6 @@ export async function fetchCreaturesWikia(name = "") {
       death: data.deathDmgMod,
       physical: data.physicalDmgMod,
     },
+    abilities: data.abilities,
   };
 }
