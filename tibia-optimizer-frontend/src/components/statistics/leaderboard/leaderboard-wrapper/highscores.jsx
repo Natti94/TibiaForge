@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchStatistics } from "../../../..";
 
-function Statistics({
+function Highscores({
   world = "antica",
   category = "experience",
   vocation,
@@ -132,93 +132,100 @@ function Statistics({
   const worldLabel = selWorld === "All" ? "All worlds" : selWorld;
 
   return (
-    <div className="media__stats">
-      <img
-        className="media__stats-banner"
-        src={assets.statistics_banner}
-        alt="Statistics Banner"
-      />
-      <div className="media__stats-controls">
-        <select
-          className="media__stats-select"
-          aria-label="World"
-          value={selWorld}
-          onChange={(e) => setSelWorld(e.target.value)}
-        >
-          {worlds.map((w) => (
-            <option key={w} value={w}>
-              {w}
-            </option>
-          ))}
-        </select>
-        <select
-          className="media__stats-select"
-          aria-label="Category"
-          value={selCategory}
-          onChange={(e) => setSelCategory(e.target.value)}
-        >
-          {CATEGORY_OPTIONS.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-        <select
-          className="media__stats-select"
-          aria-label="Vocation"
-          value={selVocation}
-          onChange={(e) => setSelVocation(e.target.value)}
-        >
-          {VOCATION_OPTIONS.map((v) => (
-            <option key={v.value} value={v.value}>
-              {v.label}
-            </option>
-          ))}
-        </select>
+    <div className="statistics__highscores-card">
+      <div className="statistics__highscores">
+        <img
+          className="statistics__highscores-banner"
+          src={assets.statistics_banner}
+          alt="Statistics Banner"
+        />
+        <div className="statistics__highscores-controls">
+          <select
+            className="statistics__highscores-select"
+            aria-label="World"
+            value={selWorld}
+            onChange={(e) => setSelWorld(e.target.value)}
+          >
+            {worlds.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </select>
+          <select
+            className="statistics__highscores-select"
+            aria-label="Category"
+            value={selCategory}
+            onChange={(e) => setSelCategory(e.target.value)}
+          >
+            {CATEGORY_OPTIONS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="statistics__highscores-select"
+            aria-label="Vocation"
+            value={selVocation}
+            onChange={(e) => setSelVocation(e.target.value)}
+          >
+            {VOCATION_OPTIONS.map((v) => (
+              <option key={v.value} value={v.value}>
+                {v.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        {error && <div className="statistics__highscores-error">{error}</div>}
+        {loading ? (
+          <div className="statistics__highscores-loading">Loading...</div>
+        ) : (
+          <ul className="statistics__highscores-list">
+            {items.map((item) => (
+              <li
+                className="statistics__highscores-item"
+                key={`${item.rank}-${item.name}`}
+              >
+                <span className="statistics__highscores-rank">
+                  #{item.rank}
+                </span>
+                <span className="statistics__highscores-name">{item.name}</span>
+                {typeof item.level === "number" ? (
+                  <span className="statistics__highscores-level">
+                    {" "}
+                    Level {item.level}
+                  </span>
+                ) : null}
+                {item.vocation ? (
+                  <span className="statistics__highscores-vocation">
+                    {" "}
+                    {item.vocation}
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+        {meta.totalPages ? (
+          <select
+            className="statistics__highscores-select-page"
+            aria-label="Page"
+            value={meta.page}
+            onChange={(e) =>
+              setMeta((m) => ({ ...m, page: Number(e.target.value) }))
+            }
+          >
+            {Array.from({ length: meta.totalPages }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Page: {i + 1}
+              </option>
+            ))}
+          </select>
+        ) : null}
       </div>
-      {error && <div className="media__stats-error">{error}</div>}
-      {loading ? (
-        <div className="media__stats-loading">Loading...</div>
-      ) : (
-        <ul className="media__stats-list">
-          {items.map((item) => (
-            <li className="media__stats-item" key={`${item.rank}-${item.name}`}>
-              <span className="media__stats-rank">#{item.rank}</span>
-              <span className="media__stats-name">{item.name}</span>
-              {typeof item.level === "number" ? (
-                <span className="media__stats-level">
-                  {" "}
-                  — Level {item.level}
-                </span>
-              ) : null}
-              {item.vocation ? (
-                <span className="media__stats-vocation">
-                  {" "}
-                  — {item.vocation}
-                </span>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      )}
-      {meta.totalPages ? (
-        <select
-          className="media__stats-select-page"
-          aria-label="Page"
-          value={meta.page}
-          onChange={(e) =>
-            setMeta((m) => ({ ...m, page: Number(e.target.value) }))
-          }
-        >
-          {Array.from({ length: meta.totalPages }, (_, i) => (
-            <option key={i + 1} value={i + 1}>
-              Page: {i + 1}
-            </option>
-          ))}
-        </select>
-      ) : null}
     </div>
   );
 }
 
-export default Statistics;
+export default Highscores;

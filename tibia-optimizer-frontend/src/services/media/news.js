@@ -10,15 +10,15 @@ export async function fetchNews(limit = 10) {
     ? archive.news.slice(0, limit)
     : [];
 
-  const enriched = await Promise.all(
+  const news = await Promise.all(
     items.map(async (item) => {
       let title = item.news;
       let image;
       let excerpt;
       try {
-        const dres = await fetch(item.url_api);
-        if (dres.ok) {
-          const detail = await dres.json();
+        const res = await fetch(item.url_api);
+        if (res.ok) {
+          const detail = await res.json();
           title = detail?.news?.title || title;
           const html = detail?.news?.content_html || "";
           const match = /<img[^>]+src=\"([^\"]+)\"/i.exec(html);
@@ -52,5 +52,5 @@ export async function fetchNews(limit = 10) {
     }),
   );
 
-  return enriched;
+  return news;
 }

@@ -2,6 +2,7 @@ export { generateCsrf } from "./services/auth/csrf";
 export { loginUser } from "./services/auth/login";
 export { registerUser } from "./services/auth/register";
 export { fetchNews } from "./services/media/news";
+export { fetchEvents } from "./services/media/events";
 export { fetchStatistics } from "./services/media/statistics";
 export { fetchCreaturesDB } from "./services/optimizer/creatures";
 export { fetchCreaturesWikia } from "./services/optimizer/creatures";

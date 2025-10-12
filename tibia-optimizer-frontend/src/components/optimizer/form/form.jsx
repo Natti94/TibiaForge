@@ -6,7 +6,6 @@ import EncounterSection from "./section/encounter";
 import Summary from "./section/summary";
 
 function Form() {
-  const [main, setMain] = useState({ vocation: "", level: "", magic: "" });
   const [intro, setIntro] = useState(true);
   const [showScroll, setShowScroll] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -18,10 +17,9 @@ function Form() {
     weapons: false,
     abilities: false,
   });
-  const [completedRight, setCompletedRight] = useState({
-    creatures: false,
-    players: false,
-  });
+
+  const [main, setMain] = useState({ vocation: "", level: "", magic: "" });
+
   const [secondary, setSecondary] = useState({
     sword: "",
     axe: "",
@@ -29,6 +27,7 @@ function Form() {
     distance: "",
     shield: "",
   });
+
   const [equipment, setEquipment] = useState({
     helmet: "",
     armor: "",
@@ -41,7 +40,13 @@ function Form() {
     quiver: "",
     spellbook: "",
   });
+
   const [weapon, setWeapon] = useState({ weapon: "", ammunition: "" });
+
+  const [completedRight, setCompletedRight] = useState({
+    creatures: false,
+    players: false,
+  });
 
   const isProd = import.meta.env.PROD;
 
@@ -181,6 +186,7 @@ function Form() {
       ),
       attack: totalAttack,
       damage: totalDamage,
+      damagePerSecond: (totalDamage * (1 + (skillSum.attack || 0) / 100)) / 2.0,
     },
   };
 

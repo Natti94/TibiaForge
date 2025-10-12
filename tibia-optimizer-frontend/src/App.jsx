@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Optimizer from "./components/optimizer/optimizer";
 import Auth from "./components/auth/auth";
 import Nav from "./components/nav/nav";
+import Statistics from "./components/statistics/statistics";
 import Media from "./components/media/media";
 import "./index.css";
 
@@ -19,6 +20,7 @@ function App() {
       <img className="background" src={assets.background} alt="Background" />
       <Auth />
       <Nav />
+      <Statistics />
       <Media />
       <Routes>
         <Route path="/" element={<Optimizer />} />
