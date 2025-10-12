@@ -116,23 +116,12 @@ Notes:
 
 ## Features
 
-- Modern optimizer UI with two SVG circles (Character and Encounter) and a center summary
-  - Both circles use a unified aqua/cyan color theme for visual consistency
-  - Click BEGIN to open an overlay with three columns:
-    - Left: Character circle (Skills → Equip → Weapons → Abilities). Center hub for vocation selection.
-    - Center: Summary panel guides completion and shows status messaging.
-    - Right: Encounter circle (Creatures → Players), gated until character is complete.
-  - Each completed slice shows a ✓ indicator; only one section window is open at a time.
-  - SVG wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center.
-  - Abort and Restart controls appear in the overlay header; BEGIN remains visible in the title area.
-- Encounter helpers:
-  - Creatures: Fetches and merges static/elemental data from both DB and Wikia APIs; displays all static properties and elemental mods.
-  - Players: UI stubbed for future expansion.
-- Media area: News, Video, Images, and Highscores Statistics
-  - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate
-- Navigation with info pages (About, Contact, Cooperations, Donate, Guides)
-- Auth scaffolding (Login/Register)
-- Cloudinary-hosted assets via `.env` during dev and Netlify Function in production
+Modern optimizer UI with two SVG circles (Character and Encounter) and a center summary - Unified aqua/cyan color theme for visual consistency - Click BEGIN to open an overlay with three columns: - Left: Character circle (Skills → Equip → Weapons → Abilities). Center hub for vocation selection. - Center: Summary panel guides completion and shows status messaging. - Right: Encounter circle (Creatures → Players), gated until character is complete. - Each completed slice shows a ✓ indicator; only one section window is open at a time. - SVG wedges with crisp separators; hover fills the exact slice; separator lines don’t cross the center. - Abort and Restart controls appear in the overlay header; BEGIN remains visible in the title area.
+Encounter helpers: - Creatures: Fetches and merges static/elemental data from both DB and Wikia APIs; displays all static properties and elemental mods. - Players: UI stubbed for future expansion.
+Media area: News, Video, Images, and Highscores Statistics - Statistics: TibiaData v4 highscores with World/Category/Vocation filters and an "ALL worlds" aggregate - Events: Now fetches from tibiawiki.dev API as a single object; UI displays all normalized event fields (name, reward, time, location, level, danger, start_date, excerpt) in a clean card layout. - Repo-wide BEM audit and cleanup: All major components (optimizer, nav, statistics, media, auth) use strict BEM methodology; legacy and redundant styles removed for maintainability.
+Navigation with info pages (About, Contact, Cooperations, Donate, Guides)
+Auth scaffolding (Login/Register)
+Cloudinary-hosted assets via `.env` during dev and Netlify Function in production
 
 ## Routing and layout
 
