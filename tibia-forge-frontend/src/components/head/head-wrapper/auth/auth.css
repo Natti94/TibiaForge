@@ -1,0 +1,280 @@
+.auth {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.auth__handler {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  pointer-events: none;
+
+}
+
+
+.auth__handler-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.auth__handler-text {
+  display: flex;
+  font-family: monospace;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  background: rgb(20, 20, 20);
+  border-bottom: 2px solid white;
+  padding: 8px 8px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  pointer-events: auto;
+  margin-bottom: 6px;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth__handler-text-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth__handler-login {
+  font-family: monospace;
+  width: fit-content;
+  max-width: 1100px;
+  background: rgba(20, 20, 20, 0.7);
+  border: 1px solid rgba(255, 140, 0, 0.25);
+  border-radius: 6px;
+  padding: 0px 6px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  pointer-events: auto;
+  margin: 0 auto;
+  margin-top: 25%;
+}
+
+.auth__handler-login h1 {
+  display: none;
+}
+
+.auth__handler-login form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 6px;
+}
+
+.auth__handler-login form>div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 260px;
+}
+
+.auth__handler-login label {
+  font-size: 0.9rem;
+  margin-top: 0;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.auth__handler-login input[type="text"],
+.auth__handler-login input[type="password"] {
+  flex: 1 1 auto;
+  min-width: 180px;
+  height: 28px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 2px;
+  outline: none;
+}
+
+.auth__handler-login button[type="submit"] {
+  height: 30px;
+  padding: 0 12px;
+  background: rgba(255, 140, 0, 0.35);
+  color: #fff;
+  border: 1px solid rgba(255, 140, 0, 0.6);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.auth__handler-login button[type="submit"]:hover {
+  background: rgba(255, 140, 0, 0.5);
+}
+
+.auth__handler-login a {
+  color: #fff;
+}
+
+.auth__handler-login a:hover {
+  color: aqua;
+}
+
+.auth__handler-register {
+  font-family: monospace;
+  width: fit-content;
+  max-width: 1100px;
+  background: rgba(20, 20, 20, 0.7);
+  border: 1px solid rgba(255, 140, 0, 0.25);
+  border-radius: 6px;
+  padding: 0px 6px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  pointer-events: auto;
+  margin: 0 auto;
+  margin-top: 25%;
+}
+
+.auth__handler-register form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 6px;
+}
+
+.auth__handler-register form>div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 260px;
+}
+
+.auth__handler-register input[type="text"],
+.auth__handler-register input[type="password"],
+.auth__handler-register input[type="email"] {
+  flex: 1 1 auto;
+  min-width: 180px;
+  height: 28px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 2px;
+  outline: none;
+}
+
+.auth__handler-register button[type="submit"] {
+  height: 30px;
+  padding: 0 12px;
+  background: rgba(0, 255, 255, 0.25);
+  color: #fff;
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.auth__cta {
+
+  display: none;
+}
+
+
+.auth__handler-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.auth__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 140, 0, 0.6);
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 140, 0, 0.35);
+  cursor: pointer;
+}
+
+.auth__btn:hover {
+  background: rgba(255, 140, 0, 0.5);
+}
+
+.auth__btn--primary {
+  background: rgba(0, 255, 255, 0.25);
+  border-color: rgba(0, 255, 255, 0.6);
+}
+
+.auth__btn--primary:hover {
+  background: rgba(0, 255, 255, 0.45);
+}
+
+.auth__handler-login form,
+.auth__handler-register form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: min(92vw, 360px);
+  margin: 0 auto;
+  padding: 6px 8px;
+}
+
+.auth__handler-login form>div,
+.auth__handler-register form>div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.auth__handler-login label,
+.auth__handler-register label {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.auth__handler-login input[type="text"],
+.auth__handler-login input[type="password"],
+.auth__handler-register input[type="text"],
+.auth__handler-register input[type="password"],
+.auth__handler-register input[type="email"] {
+  width: 100%;
+  height: auto;
+
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.auth__handler-login button[type="submit"],
+.auth__handler-register button[type="submit"] {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 2px;
+  align-self: flex-end;
+}
+
+.auth__handler-register form img {
+  align-self: center;
+}
