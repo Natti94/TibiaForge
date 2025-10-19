@@ -2,8 +2,6 @@
 
 React app to help Tibia players make smarter choices about their character’s stats, equipment, and strategy. Built with Vite + React. Ships static and deploys easily to Netlify.
 
-Live: https://tibiaoptimizer.netlify.app
-
 ## Repository layout
 
 Top-level folders:
